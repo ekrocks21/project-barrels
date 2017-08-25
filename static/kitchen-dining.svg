@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 188.2 151.3" style="enable-background:new 0 0 188.2 151.3;" xml:space="preserve">
+<style type="text/css">
+	.Drop_x0020_Shadow{fill:none;}
+	.Outer_x0020_Glow_x0020_5_x0020_pt{fill:none;}
+	.Blue_x0020_Neon{fill:none;stroke:#8AACDA;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;}
+	.Chrome_x0020_Highlight{fill:url(#SVGID_1_);stroke:#FFFFFF;stroke-width:0.3629;stroke-miterlimit:1;}
+	.Jive_GS{fill:#FFDD00;}
+	.Alyssa_GS{fill:#A6D0E4;}
+	.st0{fill:#FFFFFF;stroke:#FFFFFF;stroke-width:1.2598;stroke-miterlimit:10;}
+	.st1{fill:none;}
+	.st2{fill:#BDBCBC;}
+	.st3{fill:#8C8C8C;}
+	.st4{fill:#212120;}
+	.st5{fill:#EE4538;}
+	.st6{fill:#FFFFFF;}
+</style>
+<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="2.9112" y1="0.6299" x2="2.9112" y2="-0.3701">
+	<stop  offset="0" style="stop-color:#656565"/>
+	<stop  offset="0.618" style="stop-color:#1B1B1B"/>
+	<stop  offset="0.6292" style="stop-color:#545454"/>
+	<stop  offset="0.9831" style="stop-color:#3E3E3E"/>
+</linearGradient>
+<rect id="XMLID_8_" x="0.6" y="0.6" class="st0" width="186.9" height="150.1"/>
+<g>
+	<rect id="XMLID_7_" x="5" y="0.6" class="st1" width="180.2" height="150.1"/>
+	<g>
+		<g>
+			<circle id="XMLID_6_" class="st2" cx="94.6" cy="70" r="33.6"/>
+			<circle id="XMLID_5_" class="st3" cx="94.6" cy="70" r="16.8"/>
+		</g>
+		<path class="st4" d="M143.8,75.2h-2.8V59.9h-2.8v15.3h-2.8V59.9h-2.8v15.3c0,4.7,2.4,8.4,5.2,8.7v19.8h3.5V83.9
+			c3-0.2,5.2-4.1,5.2-8.7V59.9h-2.8v15.3H143.8z M150.8,68.7v17.6h3.5v17.6h3.5V59.9C153.9,59.9,150.8,64.8,150.8,68.7z"/>
+	</g>
+	<g>
+		<path id="XMLID_2_" class="st5" d="M32.3,88.3V92c0,1.4,1.1,2.5,2.5,2.5h2.5v3.7c0,2.7,2.2,4.9,4.9,4.9h7.4c2.7,0,4.9-2.2,4.9-4.9
+			V85.9H34.8C33.4,85.9,32.3,87,32.3,88.3z"/>
+		<rect id="XMLID_1_" x="34.8" y="88.3" class="st6" width="2.5" height="3.7"/>
+	</g>
+</g>
+</svg>
