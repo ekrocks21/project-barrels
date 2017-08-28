@@ -18,7 +18,11 @@
               </v-card-media>
               <v-card-title class="mb-0 pb-0">
                 <div>
-            <a style="text-decoration: none; color: #212121" class="mb-0" v-text="item.name" v-bind:href="item.url"></a>
+            <a style="text-decoration: none; color: #212121" 
+            class="mb-0" 
+            v-text="item.name" 
+            v-bind:href="item.url"
+            target="blank"></a>
             <div class="primary--text" v-text="item.price"></div>
           </div>
               </v-card-title>  

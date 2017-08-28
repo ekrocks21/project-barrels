@@ -14,7 +14,7 @@
           <v-layout row>
             <v-flex xs12 sm6 offset-sm3>
               <v-text-field
-                name="ShopName"
+                name="shopName"
                 label="Shop Name"
                 id="shopName"
                 v-model="shopName"
@@ -52,30 +52,22 @@
           </v-layout>
           <v-layout row>
             <v-flex xs12 sm6 offset-sm3>
-              <v-text-field
-                name="shopImage"
-                label="Shop Logo"
-                id="shopImage"
-                v-model="shopImage"></v-text-field>
+              <v-btn raised class="secondary--text" @click="onPickFile">Upload Image</v-btn>
+                <input 
+                type="file" 
+                style="display: none" 
+                ref="fileInput" 
+                accept="image/*"
+                @change="onFilePicked">
             </v-flex>
           </v-layout>
           <v-layout row>
             <v-flex xs12 sm6 offset-sm3>
-              <img :src="shopImage" height="150">
+              <img :src="imageUrl" height="150" class="mt-3 mb-3 ">
             </v-flex>
           </v-layout>
           <v-layout row>
             <v-flex xs12 sm6 offset-sm3>
-              <v-text-field
-                name="shopHeader"
-                label="Shop Header"
-                id="shopHeader"
-                v-model="shopHeader"></v-text-field>
-            </v-flex>
-          </v-layout>
-          <v-layout row>
-            <v-flex xs12 sm6 offset-sm3>
-              <img :src="shopHeader" height="150">
               <v-checkbox 
               v-bind:label="`I Agree to the Terms and Conditions`" v-model="shopTerms" 
               id="shopTerms"
@@ -109,9 +101,9 @@
         tagLine: '',
         description: '',
         location: '',
-        shopImage: '',
-        shopHeader: '',
-        shopTerms: ''
+        imageUrl: '',
+        shopTerms: '',
+        image: null
       }
     },
     computed: {
@@ -130,11 +122,26 @@
           tagLine: this.tagLine,
           description: this.description,
           location: this.location,
-          shopImage: this.shopImage,
-          shopHeader: this.shopHeader
+          image: this.image
         }
         this.$store.dispatch('createShop', shopData)
         this.$router.push('/shops')
+      },
+      onPickFile () {
+        this.$refs.fileInput.click()
+      },
+      onFilePicked (event) {
+        const files = event.target.files
+        let filename = files[0].name
+        if (filename.lastIndexOf('.') <= 0) {
+          return alert('Please upload a png or jpg file.')
+        }
+        const fileReader = new FileReader()
+        fileReader.addEventListener('load', () => {
+          this.imageUrl = fileReader.result
+        })
+        fileReader.readAsDataURL(files[0])
+        this.image = files[0]
       }
     }
   }

@@ -12,8 +12,11 @@ import Kids from '@/components/Categories/Kids'
 import Electronics from '@/components/Categories/Electronics'
 import Outdoors from '@/components/Categories/Outdoors'
 import FeaturedShops from '@/components/Featured/FeaturedShops'
-import CreateShop from '@/components/Merchant/CreateShop'
+import CreateShop from '@/components/Shop/CreateShop'
 import AuthGuard from './auth-guard'
+import Profile from '@/components/User/Profile'
+import Shop from '@/components/Shop/Shop'
+import Shops from '@/components/Shop/Shops'
 
 Vue.use(Router)
 
@@ -30,6 +33,13 @@ export default new Router({
       component: Signup
     },
     {
+      path: '/profile/:id',
+      name: 'Profile',
+      component: Profile,
+      props: true,
+      beforeEnter: AuthGuard
+    },
+    {
       path: '/signin',
       name: 'Signin',
       component: Signin
@@ -38,11 +48,6 @@ export default new Router({
       path: '/about',
       name: 'About',
       component: About
-    },
-    {
-      path: '/createshop',
-      name: 'Createshop',
-      component: CreateShop
     },
     {
       path: '/categories',
@@ -89,6 +94,17 @@ export default new Router({
       name: 'CreateShop',
       component: CreateShop,
       beforeEnter: AuthGuard
+    },
+    {
+      path: '/shops',
+      name: 'Shops',
+      component: Shops
+    },
+    {
+      path: '/shops/:id',
+      name: 'Shop',
+      props: true,
+      component: Shop
     }
   ],
   mode: 'history'

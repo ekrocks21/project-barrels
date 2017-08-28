@@ -19,9 +19,10 @@
                 <v-layout row>
                   <v-flex xs12>
                     <v-text-field
-                    name="input-1"
+                    name="displayName"
                     label="Full Name"
-                    id="testing"
+                    id="displayName"
+                    required
             ></v-text-field>
           </v-flex>
         </v-layout>
@@ -85,7 +86,7 @@
           <div class="headline">Have a favorite cause?</div>
         </v-card-title>
         <v-card-text>Create an account, promote items you enjoy, and raise money for your favorite cause.</v-card-text>
-         <v-card-text>It's that simple!</v-card-text>
+         <v-card-text>It's that simple!</v-card-text> 
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn class="info--text darken-1" flat="flat" @click.native="dialog = false"><v-icon left class="info--text">favorite_outline</v-icon>Get Started</v-btn>
@@ -100,6 +101,7 @@
   export default {
     data () {
       return {
+        displayName: '',
         email: '',
         password: '',
         confirmPassword: '',
@@ -127,7 +129,7 @@
     },
     methods: {
       onSignup () {
-        this.$store.dispatch('signUserUp', {email: this.email, password: this.password})
+        this.$store.dispatch('signUserUp', {email: this.email, password: this.password, displayName: this.displayName})
       },
       onDismissed () {
         this.$store.dispatch('clearError')

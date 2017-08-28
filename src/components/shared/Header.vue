@@ -22,6 +22,14 @@
             <v-list-tile-title id="nav-drawer-title" v-text="navItems.title"></v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+        <v-list-tile
+          v-if="userIsAuthenticated"
+          @onclick="onLogout">
+          <v-list-tile-action>
+            <v-icon>exit_to_app</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>Logout</v-list-tile-content>
+        </v-list-tile>
       </v-list>
     </v-navigation-drawer>
 
@@ -59,7 +67,7 @@
         drawer: null,
         navItems: [
           { icon: 'home', title: 'Home', link: '/' },
-          { icon: 'store', title: 'Featured Shops', link: '/featuredshops' },
+          { icon: 'store', title: 'Featured Shops', link: '/shops' },
           { icon: 'explore', title: 'Categories', link: '/categories' },
           { title: 'Home & Living', link: '/household' },
           { title: 'Health & Beauty', link: '/health' },
@@ -67,7 +75,7 @@
           { title: 'Kids & Baby', link: '/kids' },
           { title: 'Electronics', link: '/electronics' },
           { title: 'Sports & Outdoors', link: '/outdoors' },
-          { icon: 'favorite_border', title: 'Giving Back', link: '/give' },
+          { icon: 'favorite_border', title: 'Favorites', link: '/give' },
           { icon: 'info_outline', title: 'About', link: '/about' }
         ]
       }
@@ -80,7 +88,6 @@
         if (this.userIsAuthenticated) {
           menuItems = [
             {icon: 'store', link: '/createshop'},
-            {icon: 'favorite_border', link: '/favorites'},
             {icon: 'person', title: 'Profile', link: '/profile'}
           ]
         }
@@ -88,6 +95,14 @@
       },
       userIsAuthenticated () {
         return this.$store.getters.user !== null && this.$store.getters.user !== undefined
+      },
+      user () {
+        return this.$store.getters.user
+      }
+    },
+    methods: {
+      onlogOut () {
+        this.$store.dispatch('logout')
       }
     }
   }

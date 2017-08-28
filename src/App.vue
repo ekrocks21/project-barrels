@@ -15,6 +15,16 @@
     components: {
       appHeader: Header,
       appFooter: Footer
+    },
+    computed: {
+      userIsAuthenticated () {
+        return this.$store.getters.user !== null && this.$store.getters.user !== undefined
+      }
+    },
+    methods: {
+      onLogout () {
+        this.$store.dispatch('logout')
+      }
     }
   }
 </script>
