@@ -13,7 +13,7 @@
       <v-flex xs12 class="mt-5">
         <v-card>
           <v-card-title>
-            <h6 style="color:#212121">{{ shop.shopName }}</h6>
+            <h4 style="color:#212121; font-size:22px">{{ shop.shopName }}</h4>
             <template v-if="userIsCreator">
               <v-spacer></v-spacer>
               <edit-shop :shop="shop"></edit-shop>
@@ -26,22 +26,17 @@
           <v-card-text>
             <div style="font-size:16px">{{ shop.tagLine }}</div>
           </v-card-text>
-        </v-card>
-      </v-flex>
-    </v-layout>
-    <v-layout row wrap>
-     <v-flex>
-      <v-card>
-        <v-card-actions v-if="userIsCreator = false">
+        <v-card-actions v-if="userIsCreator !== true">
           <v-dialog v-model="dialog" lazy absolute>
             <v-btn flat small class="primary--text" slot="activator"><v-icon>more_horiz</v-icon></v-btn>
               <v-card>
                <v-card-title>
                 <div class="headline">About {{ shop.shopName }}</div>
                 </v-card-title>
-                <v-divider></v-divider>
+                
                 <v-card-text> {{ shop.description }} </v-card-text>
                 <v-card-text><v-icon left>location_on</v-icon> {{ shop.location }} </v-card-text>
+                <v-divider></v-divider>
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn class="info--text" flat="flat" @click.native="dialog = false">Shop</v-btn>
@@ -49,21 +44,74 @@
               </v-card>
            </v-dialog>
            <v-spacer></v-spacer>
-            <v-btn flat class="secondary--text"><v-icon left class="secondary--text">share</v-icon>Share</v-btn>
+           <v-menu 
+            origin="center center"
+            transition="scale-transition"
+            bottom>
+            <v-btn flat class="secondary--text" slot="activator"><v-icon left class="secondary--text">share</v-icon>Share</v-btn>
+             <v-list>
+              <v-list-tile v-for="share in shares" :key="share.title">
+                <v-list-tile-title>{{ share.title }}</v-list-tile-title>
+              </v-list-tile>
+            </v-list>
+           </v-menu> 
             <v-btn flat class="secondary--text"><v-icon left class="secondary--text">add</v-icon>Follow</v-btn>
           </v-card-actions>
           <v-card-actions v-if="userIsCreator"> 
-            <v-spacer></v-spacer>
-            <v-btn flat class="primary--text">Deactivate</v-btn>
+            <v-text-field
+              prepend-icon="search"
+              label="Search to add products"
+              single-line
+              hide-details
+              v-model="search"
+      ></v-text-field>
+            <v-spacer class="hidden-xs-only"></v-spacer>
+            <v-dialog v-model="dialog" lazy absolute>
+              <v-btn flat class="primary--text hidden-xs-only" slot="activator">Deactivate</v-btn>
+              <v-card>
+               <v-card-title>
+                <div class="headline">Deactivate Shop</div>
+                </v-card-title>
+                <v-divider></v-divider>
+                <v-card-text> By clicking confirm your account will be deleted and your shop data may be lost.</v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn class="accent--text" flat="flat" @click.native="dialog = false"><v-icon class="accent--text" left>delete_forever</v-icon>confirm</v-btn>
+                  <v-btn class="secondary--text" flat="flat" @click.native="dialog = false">cancel</v-btn>
+                </v-card-actions>
+              </v-card>
+           </v-dialog>
           </v-card-actions>
       </v-card>
      </v-flex>
     </v-layout>
+    <ShopProducts></ShopProducts>
   </v-container>
 </template>
 
 <script>
+  import ShopProducts from './ShopProducts.vue'
   export default {
+    components: {
+      ShopProducts: ShopProducts
+    },
+    data () {
+      return {
+        search: '',
+        dialog: false,
+        shares: [
+          {
+            title: 'Email'
+          },
+          {
+            title: 'Facebook'
+          },
+          {
+            title: 'Twitter'
+          }
+        ]
+      }
+    },
     props: ['id'],
     computed: {
       shop () {

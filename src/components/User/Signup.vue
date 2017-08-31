@@ -22,6 +22,7 @@
                     name="displayName"
                     label="Full Name"
                     id="displayName"
+                    v-model="displayName"
                     required
             ></v-text-field>
           </v-flex>

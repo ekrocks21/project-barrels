@@ -24,13 +24,14 @@
         </v-list-tile>
         <v-list-tile
           v-if="userIsAuthenticated"
-          @onclick="onLogout">
+          @click="onLogout">
           <v-list-tile-action>
             <v-icon>exit_to_app</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>Logout</v-list-tile-content>
         </v-list-tile>
       </v-list>
+
     </v-navigation-drawer>
 
     <v-toolbar 
@@ -55,7 +56,27 @@
         class="mr-3"
         v-bind:ripple="{ class: 'secondary--text' }">
           <v-icon>{{ item.icon }}</v-icon>
-        </v-btn>   
+        </v-btn>
+         <v-btn 
+        v-if="userHasShop"
+        :to="'/shops/' + shop.id"
+        fab 
+        style="color: #212121" 
+        small 
+        class="mr-3"
+        v-bind:ripple="{ class: 'secondary--text' }">
+          <v-icon>person</v-icon>
+        </v-btn>           
+        <v-btn 
+        v-if="userHasProfile"
+        :to="'/profile/' + user.id"
+        fab 
+        style="color: #212121" 
+        small 
+        class="mr-3"
+        v-bind:ripple="{ class: 'secondary--text' }">
+          <v-icon>person</v-icon>
+        </v-btn>     
     </v-toolbar>
    </v-layout> 
 </template>
@@ -86,22 +107,27 @@
           {icon: 'person', link: '/signin'}
         ]
         if (this.userIsAuthenticated) {
-          menuItems = [
-            {icon: 'store', link: '/createshop'},
-            {icon: 'person', title: 'Profile', link: '/profile'}
-          ]
+          menuItems = []
         }
         return menuItems
       },
       userIsAuthenticated () {
         return this.$store.getters.user !== null && this.$store.getters.user !== undefined
       },
+      userHasProfile () {
+        if (this.$store.getters.user !== null && this.$store.getters.user !== undefined) {
+          return this.$store.getters.user.id
+        }
+      },
+      shops () {
+        return this.$store.getters.loadedShops
+      },
       user () {
         return this.$store.getters.user
       }
     },
     methods: {
-      onlogOut () {
+      onLogout () {
         this.$store.dispatch('logout')
       }
     }

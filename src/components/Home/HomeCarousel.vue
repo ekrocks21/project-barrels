@@ -23,7 +23,7 @@
       return {
         carousel: [
           {
-            src: './static/homeimage.png', id: 'signup'
+            src: './static/homeimage.png', id: 'about'
           },
           {
             src: './static/featuredinfluencer.jpg', id: 'about'
