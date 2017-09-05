@@ -6,11 +6,17 @@ import router from './router'
 import { store } from './store'
 import AlertCmp from './components/shared/Alert.vue'
 import EditShop from './components/Shop/Edit/EditShop.vue'
+import CreateProduct from './components/Shop/CreateProduct.vue'
+import ShopProducts from './components/Shop/ShopProducts.vue'
+import FollowDialog from './components/Shop/FollowedUsers/FollowDialog.vue'
 
 Vue.use(Vuetify)
 Vue.config.productionTip = false
 Vue.component('app-alert', AlertCmp)
 Vue.component('edit-shop', EditShop)
+Vue.component('create-product', CreateProduct)
+Vue.component('shop-products', ShopProducts)
+Vue.component('follow-dialog', FollowDialog)
 
 /* eslint-disable no-new */
 new Vue({
@@ -32,6 +38,7 @@ new Vue({
       }
     })
     this.$store.dispatch('loadShops')
+    this.$store.dispatch('loadProducts')
   }
 })
 

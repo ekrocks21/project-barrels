@@ -18,6 +18,9 @@
               <v-spacer></v-spacer>
               <edit-shop :shop="shop"></edit-shop>
             </template>
+            <template v-if="userIsCreator">
+              <create-product :shop="shop"></create-product>
+            </template>
           </v-card-title>
           <v-card-media
             :src="shop.imageUrl"
@@ -48,14 +51,16 @@
             origin="center center"
             transition="scale-transition"
             bottom>
-            <v-btn flat class="secondary--text" slot="activator"><v-icon left class="secondary--text">share</v-icon>Share</v-btn>
+            <v-btn flat class="primary--text" slot="activator"><v-icon left class="primary--text">share</v-icon>Share</v-btn>
              <v-list>
               <v-list-tile v-for="share in shares" :key="share.title">
                 <v-list-tile-title>{{ share.title }}</v-list-tile-title>
               </v-list-tile>
             </v-list>
            </v-menu> 
-            <v-btn flat class="secondary--text"><v-icon left class="secondary--text">add</v-icon>Follow</v-btn>
+            <follow-dialog
+                :shopId="shop.id">
+              </follow-dialog>
           </v-card-actions>
           <v-card-actions v-if="userIsCreator"> 
             <v-text-field
@@ -85,16 +90,13 @@
       </v-card>
      </v-flex>
     </v-layout>
-    <ShopProducts></ShopProducts>
+    <shop-products 
+    :shop="shop.id"></shop-products>
   </v-container>
 </template>
 
 <script>
-  import ShopProducts from './ShopProducts.vue'
   export default {
-    components: {
-      ShopProducts: ShopProducts
-    },
     data () {
       return {
         search: '',
@@ -116,6 +118,9 @@
     computed: {
       shop () {
         return this.$store.getters.loadedShop(this.id)
+      },
+      products () {
+        return this.$store.getters.loadedProducts
       },
       userIsAuthenticated () {
         return this.$store.getters.user !== null && this.$store.getters.user !== undefined

@@ -85,6 +85,7 @@
   export default {
     data () {
       return {
+        props: ['shop'],
         drawer: null,
         navItems: [
           { icon: 'home', title: 'Home', link: '/' },

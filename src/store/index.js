@@ -7,11 +7,25 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   state: {
     loadedShops: null,
+    loadedProducts: null,
     user: null,
     loading: false,
     error: null
   },
   mutations: {
+    followUserForShop (state, payload) {
+      const id = payload.id
+      if (state.user.followedUsers.findIndex(shop => shop.id === id) >= 0) {
+        return
+      }
+      state.user.followedUsers.push(id)
+      state.user.fbKeys[id] = payload.fbKey
+    },
+    unfollowUserFromShop (state, payload) {
+      const followedUsers = state.user.followedUsers
+      followedUsers.splice(followedUsers.findIndex(shop => shop.id === payload), 1)
+      Reflect.deleteProperty(state.user.fbKeys, payload)
+    },
     setLoadedShops (state, payload) {
       state.loadedShops = payload
     },
@@ -35,6 +49,12 @@ export const store = new Vuex.Store({
         shop.location = payload.location
       }
     },
+    setLoadedProducts (state, payload) {
+      state.loadedProducts = payload
+    },
+    createProduct (state, payload) {
+      state.loadedProducts.push(payload)
+    },
     setUser (state, payload) {
       state.user = payload
     },
@@ -49,6 +69,38 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
+    followUserForShop ({commit, getters}, payload) {
+      commit('setLoading', true)
+      const user = getters.user
+      firebase.database().ref('/users/' + user.id).child('/following/')
+        .push(payload)
+        .then(data => {
+          commit('setLoading', false)
+          commit('followUserForShop', {id: payload, fbKey: data.key})
+        })
+        .catch(error => {
+          console.log(error)
+          commit('setLoading', false)
+        })
+    },
+    unfollowUserFromShop ({commit, getters}, payload) {
+      commit('setLoading', true)
+      const user = getters.user
+      if (!user.fbKeys) {
+        return
+      }
+      const fbKey = user.fbKeys[payload]
+      firebase.database().ref('/users/' + user.id + '/following/').child(fbKey)
+        .remove()
+        .then(() => {
+          commit('setLoading', false)
+          commit('unfollowUserFromShop', payload)
+        })
+        .catch(error => {
+          console.log(error)
+          commit('setLoading', false)
+        })
+    },
     loadShops ({commit}) {
       commit('setLoading', true)
       firebase.database().ref('shops').once('value')
@@ -137,6 +189,71 @@ export const store = new Vuex.Store({
           commit('setLoading', false)
         })
     },
+    loadProducts ({commit}) {
+      commit('setLoading', true)
+      firebase.database().ref('products').once('value')
+        .then((data) => {
+          const products = []
+          const obj = data.val()
+          for (let key in obj) {
+            products.push({
+              id: key,
+              productName: obj[key].productName,
+              productDescription: obj[key].productDescription,
+              productPrice: obj[key].productPrice,
+              productUrl: obj[key].productUrl,
+              productImageUrl: obj[key].productImageUrl,
+              productCategory: obj[key].productCategory,
+              creatorId: obj[key].creatorId
+            })
+          }
+          commit('setLoadedProducts', products)
+          commit('setLoading', false)
+        })
+        .catch(
+          (error) => {
+            console.log(error)
+            commit('setLoading', false)
+          }
+        )
+    },
+    createProduct ({commit, getters}, payload) {
+      const product = {
+        productName: payload.productName,
+        productDescription: payload.productDescription,
+        productPrice: payload.productPrice,
+        productUrl: payload.productUrl,
+        productCategory: payload.productCategory,
+        creatorId: getters.user.id
+      }
+      let productImageUrl
+      let key
+      firebase.database().ref('products').push(product)
+        .then((data) => {
+          key = data.key
+          return key
+        })
+        .then(key => {
+          const filename = payload.productImage.name
+          const ext = filename.slice(filename.lastIndexOf('.'))
+          return firebase.storage().ref('products/' + key + '.' + ext).put(payload.productImage)
+        })
+        .then(fileData => {
+          productImageUrl = fileData.metadata.downloadURLs[0]
+          return firebase.database().ref('products').child(key).update({productImageUrl: productImageUrl})
+        })
+        .then(() => {
+          commit('createProduct', {
+            ...product,
+            productImageUrl: productImageUrl,
+            id: key
+          })
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+      // Reach out to firebase and store it
+    },
     signUserUp ({commit}, payload) {
       commit('setLoading', true)
       commit('clearError')
@@ -145,7 +262,9 @@ export const store = new Vuex.Store({
           user => {
             commit('setLoading', false)
             const newUser = {
-              id: user.uid
+              id: user.uid,
+              followedUsers: [],
+              fbKeys: {}
             }
             commit('setUser', newUser)
           }
@@ -166,7 +285,9 @@ export const store = new Vuex.Store({
           user => {
             commit('setLoading', false)
             const newUser = {
-              id: user.uid
+              id: user.uid,
+              followedUsers: [],
+              fbKeys: {}
             }
             commit('setUser', newUser)
           }
@@ -180,7 +301,11 @@ export const store = new Vuex.Store({
         )
     },
     autoSignIn ({commit}, payload) {
-      commit('setUser', { id: payload.uid })
+      commit('setUser', {
+        id: payload.uid,
+        followedUsers: [],
+        fbKeys: {}
+      })
     },
     logout ({commit}) {
       firebase.auth().signOut()
@@ -201,6 +326,16 @@ export const store = new Vuex.Store({
       return shopId => {
         return state.loadedShops.find((shop) => {
           return shop.id === shopId
+        })
+      }
+    },
+    loadedProducts (state) {
+      return state.loadedProducts
+    },
+    loadedProduct (state) {
+      return productId => {
+        return state.loadedProducts.find((product) => {
+          return product.id === productId
         })
       }
     },

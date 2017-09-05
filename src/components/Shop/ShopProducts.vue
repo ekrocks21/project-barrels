@@ -1,90 +1,43 @@
 <template>
-      <v-container fluid grid-list-md>
-        <h3 class="hidden-md-and-up mb-5 primary--text headline" style="text-align: center"> Explore goods that give</h3>
-        <h3 class="hidden-sm-and-down mt-5 mb-5 primary--text headline" style="text-align: center"> Explore goods that give</h3>
-        <v-layout row wrap mb-5>
-          <v-flex xs12 sm3
-          v-for="(item, i) in items"
-          :key="i"
-          class="mt-0">
-            <v-card 
-            id="home-featured-products-lg-card"
-            raised
-            hover
-            style="cursor: default"
-            class="ma-3">
-              <v-card-media>
-                <img :src="item.image">
-              </v-card-media>
-              <v-card-title class="mb-0 pb-0">
-                <div>
-            <a style="text-decoration: none; color: #212121" 
-            class="mb-0" 
-            v-text="item.name" 
-            v-bind:href="item.url"
-            target="blank"></a>
-            <div class="primary--text" v-text="item.price"></div>
-          </div>
-              </v-card-title>  
-              <v-card-actions class="white mt-0 pt-0">
+  <v-layout row wrap>
+      <v-flex xs12 sm4
+        v-for="product in products" 
+        :key="shop.id" 
+        class="mt-5">
+        <v-card hover style="margin:10px">
+                <v-card-media
+                  :src="product.productImageUrl"
+                  height="200px">
+                </v-card-media>
+                <v-card-text>
+                <p style="font-size:16px; line-height: 0px">{{ product.productName }}</p>
+                <p style="font-size:14px; line-height: 7px; margin-bottom: 0px">{{ product.productPrice }}</p>
+                </v-card-text>
+                <v-card-actions style="background-color: #fafafa">
                 <v-spacer></v-spacer>
-                <v-btn 
-                icon 
-                style="cursor: pointer"
-                v-bind:ripple="{ class: 'secondary--text' }"
-                >
-                  <v-icon class="secondary--text">favorite_outline</v-icon>
-                </v-btn>
-
-                <v-btn 
-                v-bind:href="item.url" 
-                icon style="cursor: pointer;" 
-                target="blank"
-                v-bind:ripple="{ class: 'info--text' }">
+                  <v-btn 
+                    v-bind:href="product.productUrl" 
+                    icon style="cursor: pointer;" 
+                    target="blank"
+                    v-bind:ripple="{ class: 'info--text' }">
                   <v-icon class="info--text">launch</v-icon>
                 </v-btn>
-              </v-card-actions>
-              
-            </v-card>
-          </v-flex>
-      </v-layout> 
-      </v-container>
+                </v-card-actions>
+        </v-card>
+      </v-flex>
+    </v-layout>
 </template>
 
 <script>
   export default {
-    data () {
-      return {
-        items: [
-          { image: '../static/google-home.png', name: 'Google Home', price: '$99.99', url: 'http://www.amazon.com' },
-          { image: '../static/google-home.png', name: 'Google Home', price: '$99.99', url: 'http://www.amazon.com' },
-          { image: '../static/google-home.png', name: 'Google Home', price: '$99.99', url: 'http://www.amazon.com' },
-          { image: '../static/google-home.png', name: 'Google Home', price: '$99.99', url: 'http://www.amazon.com' },
-          { image: '../static/google-home.png', name: 'Google Home', price: '$99.99', url: 'http://www.amazon.com' },
-          { image: '../static/google-home.png', name: 'Google Home', price: '$99.99', url: 'http://www.amazon.com' },
-          { image: '../static/google-home.png', name: 'Google Home', price: '$99.99', url: 'http://www.amazon.com' },
-          { image: '../static/google-home.png', name: 'Google Home', price: '$99.99', url: 'http://www.amazon.com' }
-        ]
+    props: ['shop'],
+    computed: {
+      products () {
+        return this.$store.getters.loadedProducts
+      },
+      userIsAuthenticated () {
+        return this.$store.getters.user !== null && this.$store.getters.user !== undefined
       }
     }
   }
 </script>
-
-
-
-<style scoped>
-
-#product-price {
-  color: #607D8B;
-  text-align: left;
-  padding-top: 5px;
-}
-
-#product-launch-icon {
-  color: #10b6a0 !important;
-}
-#launch-product-url {
-  color: #ffffff;
-
-}
-</style>

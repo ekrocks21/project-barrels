@@ -52,7 +52,8 @@
           </v-layout>
           <v-layout row>
             <v-flex xs12 sm6 offset-sm3>
-              <v-btn raised class="secondary--text" @click="onPickFile">Upload Image</v-btn>
+              <img :src="imageUrl" height="150" class="mt-3 mb-0 ">
+               <v-btn raised small class="primary--text" @click="onPickFile">Upload Image</v-btn>
                 <input 
                 type="file" 
                 style="display: none" 
@@ -60,25 +61,21 @@
                 accept="image/*"
                 @change="onFilePicked">
             </v-flex>
-          </v-layout>
-          <v-layout row>
-            <v-flex xs12 sm6 offset-sm3>
-              <img :src="imageUrl" height="150" class="mt-3 mb-3 ">
-            </v-flex>
-          </v-layout>
+          </v-layout>      
           <v-layout row>
             <v-flex xs12 sm6 offset-sm3>
               <v-checkbox 
               v-bind:label="`I Agree to the Terms and Conditions`" v-model="shopTerms" 
               id="shopTerms"
               name="shopTerms"
+              required
               info></v-checkbox>
             </v-flex>
           </v-layout>
           <v-layout row>
             <v-flex xs12 sm6 offset-sm3>
               <v-btn
-                class="primary mb-5"
+                class="secondary mb-5"
 
                 :disabled="!formIsValid"
                 type="submit">Create Shop</v-btn>
