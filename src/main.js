@@ -9,6 +9,7 @@ import EditShop from './components/Shop/Edit/EditShop.vue'
 import CreateProduct from './components/Shop/CreateProduct.vue'
 import ShopProducts from './components/Shop/ShopProducts.vue'
 import FollowDialog from './components/Shop/FollowedUsers/FollowDialog.vue'
+import FavoritedProduct from './components/User/Favorites/FavoritedProducts.vue'
 
 Vue.use(Vuetify)
 Vue.config.productionTip = false
@@ -17,6 +18,7 @@ Vue.component('edit-shop', EditShop)
 Vue.component('create-product', CreateProduct)
 Vue.component('shop-products', ShopProducts)
 Vue.component('follow-dialog', FollowDialog)
+Vue.component('favorite-product', FavoritedProduct)
 
 /* eslint-disable no-new */
 new Vue({

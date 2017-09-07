@@ -46,12 +46,12 @@
                 </v-card-actions>
               </v-card>
            </v-dialog>
-           <v-spacer></v-spacer>
+           <v-spacer class="hidden-xs-only"></v-spacer>
            <v-menu 
             origin="center center"
             transition="scale-transition"
             bottom>
-            <v-btn flat class="primary--text" slot="activator"><v-icon left class="primary--text">share</v-icon>Share</v-btn>
+            <v-btn small flat class="secondary--text " slot="activator"><v-icon left class="secondary--text hidden-xs-only">share</v-icon>Share</v-btn>
              <v-list>
               <v-list-tile v-for="share in shares" :key="share.title">
                 <v-list-tile-title>{{ share.title }}</v-list-tile-title>
@@ -90,8 +90,18 @@
       </v-card>
      </v-flex>
     </v-layout>
-    <shop-products 
-    :shop="shop.id"></shop-products>
+        <v-layout row wrap v-if="loading">
+      <v-flex xs12 class="text-xs-center">
+        <v-progress-circular
+          indeterminate
+          class="secondary--text mt-5"
+          :width="5"
+          :size="70"></v-progress-circular>
+      </v-flex>
+    </v-layout>
+    <shop-products v-else
+                :shopId="this.id">
+    </shop-products>
   </v-container>
 </template>
 
@@ -118,9 +128,6 @@
     computed: {
       shop () {
         return this.$store.getters.loadedShop(this.id)
-      },
-      products () {
-        return this.$store.getters.loadedProducts
       },
       userIsAuthenticated () {
         return this.$store.getters.user !== null && this.$store.getters.user !== undefined

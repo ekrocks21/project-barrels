@@ -13,7 +13,6 @@
           v-for="navItems in navItems"
           :key="navItems.icon"
           :to="navItems.link"
-          v-bind:ripple="{ class: 'secondary--text' }"
           >
           <v-list-tile-action>
             <v-icon id="nav-drawer-icon" v-html="navItems.icon"></v-icon>
@@ -36,7 +35,6 @@
 
     <v-toolbar 
     fixed 
-    scroll-off-screen
     style='background-color: #ffffff'>
       <v-toolbar-side-icon v-bind:ripple="{ class: 'secondary--text' }" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title id='logo'><router-link to='/'
@@ -56,17 +54,7 @@
         class="mr-3"
         v-bind:ripple="{ class: 'secondary--text' }">
           <v-icon>{{ item.icon }}</v-icon>
-        </v-btn>
-         <v-btn 
-        v-if="userHasShop"
-        :to="'/shops/' + shop.id"
-        fab 
-        style="color: #212121" 
-        small 
-        class="mr-3"
-        v-bind:ripple="{ class: 'secondary--text' }">
-          <v-icon>person</v-icon>
-        </v-btn>           
+        </v-btn>        
         <v-btn 
         v-if="userHasProfile"
         :to="'/profile/' + user.id"
@@ -85,7 +73,7 @@
   export default {
     data () {
       return {
-        props: ['shop'],
+        props: ['user.id'],
         drawer: null,
         navItems: [
           { icon: 'home', title: 'Home', link: '/' },
@@ -119,9 +107,6 @@
         if (this.$store.getters.user !== null && this.$store.getters.user !== undefined) {
           return this.$store.getters.user.id
         }
-      },
-      shops () {
-        return this.$store.getters.loadedShops
       },
       user () {
         return this.$store.getters.user

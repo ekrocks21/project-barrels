@@ -1,11 +1,11 @@
 <template>
 
-    <v-btn class="primary"  slot="activator" v-if="userIsFollowing" @click="onAgree">
-    <v-icon left dark>remove</v-icon>
+    <v-btn small flat class="primary--text" slot="activator" v-if="userIsFollowing" @click="onAgree">
+    <v-icon class="hidden-xs-only" left>remove</v-icon>
       unfollow
     </v-btn>
-    <v-btn class="secondary"  slot="activator" v-else @click="onAgree">
-    <v-icon left dark> add </v-icon>
+    <v-btn small class="secondary"  slot="activator" v-else @click="onAgree">
+    <v-icon class="hidden-xs-only" left dark> add </v-icon>
       Follow
     </v-btn>
     

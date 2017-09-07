@@ -115,7 +115,8 @@ export const store = new Vuex.Store({
               description: obj[key].description,
               imageUrl: obj[key].imageUrl,
               location: obj[key].location,
-              creatorId: obj[key].creatorId
+              creatorId: obj[key].creatorId,
+              products: obj[key].products
             })
           }
           commit('setLoadedShops', shops)
@@ -134,7 +135,8 @@ export const store = new Vuex.Store({
         tagLine: payload.tagLine,
         description: payload.description,
         location: payload.location,
-        creatorId: getters.user.id
+        creatorId: getters.user.id,
+        products: getters.loadedProducts
       }
       let imageUrl
       let key
@@ -189,9 +191,9 @@ export const store = new Vuex.Store({
           commit('setLoading', false)
         })
     },
-    loadProducts ({commit}) {
+    loadProducts ({commit, getters}, payload) {
       commit('setLoading', true)
-      firebase.database().ref('products').once('value')
+      firebase.database().ref('shops/').child(getters.loadedShop.shopId + '/products').once('value')
         .then((data) => {
           const products = []
           const obj = data.val()
@@ -204,7 +206,8 @@ export const store = new Vuex.Store({
               productUrl: obj[key].productUrl,
               productImageUrl: obj[key].productImageUrl,
               productCategory: obj[key].productCategory,
-              creatorId: obj[key].creatorId
+              creatorId: obj[key].creatorId,
+              shopId: obj[key].shopId
             })
           }
           commit('setLoadedProducts', products)
@@ -224,11 +227,12 @@ export const store = new Vuex.Store({
         productPrice: payload.productPrice,
         productUrl: payload.productUrl,
         productCategory: payload.productCategory,
-        creatorId: getters.user.id
+        creatorId: getters.user.id,
+        shopId: payload.shopId
       }
       let productImageUrl
       let key
-      firebase.database().ref('products').push(product)
+      firebase.database().ref('shops/').child(payload.shopId + '/products').push(product)
         .then((data) => {
           key = data.key
           return key
@@ -236,11 +240,11 @@ export const store = new Vuex.Store({
         .then(key => {
           const filename = payload.productImage.name
           const ext = filename.slice(filename.lastIndexOf('.'))
-          return firebase.storage().ref('products/' + key + '.' + ext).put(payload.productImage)
+          return firebase.storage().ref('/shops/').child(payload.shopId + '/products/' + key + '.' + ext).put(payload.productImage)
         })
         .then(fileData => {
           productImageUrl = fileData.metadata.downloadURLs[0]
-          return firebase.database().ref('products').child(key).update({productImageUrl: productImageUrl})
+          return firebase.database().ref('shops/').child(payload.shopId + '/products/' + key).update({productImageUrl: productImageUrl})
         })
         .then(() => {
           commit('createProduct', {

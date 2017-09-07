@@ -4,7 +4,7 @@
     <v-icon>add</v-icon>
   </v-btn>
   <v-card>
-    <v-toolbar dark class="info">
+    <v-toolbar dark class="primary">
       <v-btn icon @click.native="addProductDialog = false" dark>
         <v-icon>close</v-icon>
       </v-btn>
@@ -38,7 +38,8 @@
                 name="productDescription"
                 label="Description"
                 id="productDescription"
-                multi-line
+                textarea
+                rows="3"
                 v-model="productDescription"></v-text-field>
             </v-flex>
           </v-layout>
@@ -47,6 +48,8 @@
               <v-text-field
                 name="productPrice"
                 label="Price"
+                prefix="$"
+                type="number"
                 id="productPrice"
                 v-model="productPrice"
                 ></v-text-field>
@@ -118,7 +121,7 @@
         productUrl: '',
         productImageUrl: '',
         productImage: null,
-        productCategorySelect: { productCategory: 'categories' },
+        productCategorySelect: { productCategory: 'Category' },
         productCategory: [
           { productCategory: 'Women' },
           { productCategory: 'Men' },

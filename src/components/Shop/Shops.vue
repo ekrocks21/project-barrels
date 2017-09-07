@@ -11,15 +11,12 @@
     </v-layout>
   <v-layout 
   v-else 
-  row wrap 
-  v-for="shop in shops" 
-  :key="shop.id" 
-  class="mb-2 mt-5">
-      <v-flex xs12 sm6 offset-sm3>
-        <v-card hover>
-          <v-card-title>
-          <h5 style="color:#212121; font-size:22px">{{ shop.shopName }}</h5>
-          </v-card-title>  
+  row wrap >
+      <v-flex xs12 sm4
+        v-for="shop in shops" 
+        :key="shop.id" 
+        class="mb-2 mt-5">
+        <v-card hover style="margin:10px"> 
             <v-layout row>
               <v-flex xs12>  
                 <v-card-media
@@ -27,17 +24,19 @@
                   height="200px">
                 </v-card-media>
                 <v-card-text>
-                <div style="font-size:16px">{{ shop.tagLine }}</div>
+                <div style="font-size:20px; font-family: 'Product Sans'">{{ shop.shopName }}</div>
                 </v-card-text>
               </v-flex>
             </v-layout>
             <v-layout>
               <v-flex xs12>
-                <v-card-actions>
+                <v-card-actions style="background-color: #fafafa">
                  <v-spacer></v-spacer>
-                  <v-btn flat :to="'/shops/' + shop.id">
-                  <v-icon left light>arrow_forward</v-icon>
-                    View Shop
+                  <v-btn :to="'/shops/' + shop.id"
+                    icon
+                    style="cursor: pointer;" 
+                    v-bind:ripple="{ class: 'info--text' }">
+                  <v-icon class="secondary--text">launch</v-icon>
                   </v-btn>
                 </v-card-actions>
               </v-flex>

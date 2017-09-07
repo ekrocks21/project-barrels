@@ -20,7 +20,7 @@
                   <v-flex xs12>
                     <v-text-field
                       name="email"
-                      label="Mail"
+                      label="Email"
                       id="email"
                       v-model="email"
                       type="email"
@@ -32,9 +32,11 @@
                     <v-text-field
                       name="password"
                       label="Password"
+                      :append-icon="e1 ? 'visibility_off' : 'visibility'"
+                      :append-icon-cb="() => (e1 = !e1)"
                       id="password"
                       v-model="password"
-                      type="password"
+                      :type="e1 ? 'password' : 'text'"
                       required>
                       </v-text-field> 
                   </v-flex>
@@ -68,6 +70,7 @@
   export default {
     data () {
       return {
+        e1: true,
         email: '',
         password: ''
       }

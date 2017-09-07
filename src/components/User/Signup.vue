@@ -44,8 +44,11 @@
                       name="password"
                       label="Password"
                       id="password"
+                      :append-icon="e1 ? 'visibility_off' : 'visibility'"
+                      :append-icon-cb="() => (e1 = !e1)"
                       v-model="password"
-                      type="password"
+                      :type="e1 ? 'password' : 'text'"
+                      counter
                       required
                       v-tooltip:right="{ html: '6-digits please!' }" primary></v-text-field>
                   </v-flex>
@@ -102,6 +105,7 @@
   export default {
     data () {
       return {
+        e1: true,
         displayName: '',
         email: '',
         password: '',

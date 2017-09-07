@@ -2,7 +2,7 @@
   <v-layout row wrap>
       <v-flex xs12 sm4
         v-for="product in products" 
-        :key="shop.id" 
+        :key="product.id" 
         class="mt-5">
         <v-card hover style="margin:10px">
                 <v-card-media
@@ -13,16 +13,20 @@
                 <p style="font-size:16px; line-height: 0px">{{ product.productName }}</p>
                 <p style="font-size:14px; line-height: 7px; margin-bottom: 0px">{{ product.productPrice }}</p>
                 </v-card-text>
+
                 <v-card-actions style="background-color: #fafafa">
                 <v-spacer></v-spacer>
+
                   <v-btn 
+                    icon
                     v-bind:href="product.productUrl" 
                     icon style="cursor: pointer;" 
                     target="blank"
                     v-bind:ripple="{ class: 'info--text' }">
-                  <v-icon class="info--text">launch</v-icon>
+                  <v-icon class="secondary--text">launch</v-icon>
                 </v-btn>
                 </v-card-actions>
+
         </v-card>
       </v-flex>
     </v-layout>
@@ -30,10 +34,15 @@
 
 <script>
   export default {
-    props: ['shop'],
+    data () {
+      return {
+        products: this.$store.getters.loadedShop(this.shopId).products
+      }
+    },
+    props: ['shopId'],
     computed: {
-      products () {
-        return this.$store.getters.loadedProducts
+      shop () {
+        return this.$store.getters.loadedShop(this.shopId)
       },
       userIsAuthenticated () {
         return this.$store.getters.user !== null && this.$store.getters.user !== undefined
