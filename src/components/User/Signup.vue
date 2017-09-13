@@ -19,10 +19,10 @@
                 <v-layout row>
                   <v-flex xs12>
                     <v-text-field
-                    name="displayName"
+                    name="fullName"
                     label="Full Name"
-                    id="displayName"
-                    v-model="displayName"
+                    id="fullName"
+                    v-model="fullName"
                     required
             ></v-text-field>
           </v-flex>
@@ -106,7 +106,7 @@
     data () {
       return {
         e1: true,
-        displayName: '',
+        fullName: '',
         email: '',
         password: '',
         confirmPassword: '',
@@ -134,7 +134,7 @@
     },
     methods: {
       onSignup () {
-        this.$store.dispatch('signUserUp', {email: this.email, password: this.password, displayName: this.displayName})
+        this.$store.dispatch('signUserUp', {email: this.email, password: this.password, fullName: this.fullName, profileName: this.fullName})
       },
       onDismissed () {
         this.$store.dispatch('clearError')

@@ -29,6 +29,14 @@
           </v-list-tile-action>
           <v-list-tile-content>Logout</v-list-tile-content>
         </v-list-tile>
+        <v-list-tile
+          v-else
+          to="/signin">
+          <v-list-tile-action>
+            <v-icon>person</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>Sign In</v-list-tile-content>
+        </v-list-tile>
       </v-list>
 
     </v-navigation-drawer>
@@ -57,7 +65,7 @@
         </v-btn>        
         <v-btn 
         v-if="userHasProfile"
-        :to="'/profile/' + user.id"
+        :to="'/profile/' + userProfile.fullName"
         fab 
         style="color: #212121" 
         small 
@@ -110,6 +118,9 @@
       },
       user () {
         return this.$store.getters.user
+      },
+      userProfile () {
+        return this.$store.getters.userProfile[0]
       }
     },
     methods: {

@@ -50,10 +50,33 @@
                        </span>
                     </v-btn>
 
-                    <v-btn icon class="primary--text"
+                    <v-dialog v-model="pwReset">
+                    <v-btn icon class="primary--text" slot="activator"
                     v-tooltip:right="{ html: 'Forgot password?' }">
                       <v-icon>help_outline</v-icon>
                     </v-btn>
+                    <v-card>
+                      <v-card-title>
+                        <span class="headline">Reset Password</span>
+                      </v-card-title>
+                      <v-divider></v-divider>
+                      <v-card-text>
+                        <v-container>
+                          <v-layout wrap>
+                            <v-flex xs12>
+                              <v-text-field label="Email" id="emailPasswordReset" v-model="emailPasswordReset"></v-text-field>
+                            </v-flex>
+                           </v-layout>
+                          </v-container>
+                         </v-card-text> 
+                         <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn class="primary--text" flat @click="pwReset = false">Close</v-btn>
+                          <v-btn class="secondary--text" flat @click="resetPw">Reset</v-btn>
+                        </v-card-actions>  
+                    </v-card>
+                    </v-dialog>
+
                   </v-flex>
                 </v-layout>
               </form>
@@ -72,7 +95,9 @@
       return {
         e1: true,
         email: '',
-        password: ''
+        password: '',
+        pwReset: false,
+        emailPasswordReset: ''
       }
     },
     computed: {
@@ -96,6 +121,9 @@
     methods: {
       onSignin () {
         this.$store.dispatch('signUserIn', {email: this.email, password: this.password})
+      },
+      resetPw () {
+        this.$store.dispatch('resetPassword', {emailPasswordReset: this.emailPasswordReset})
       },
       onDismissed () {
         this.$store.dispatch('clearError')

@@ -59,7 +59,8 @@
             </v-list>
            </v-menu> 
             <follow-dialog
-                :shopId="shop.id">
+                :shopId="shop.id"
+                v-if="userIsAuthenticated">
               </follow-dialog>
           </v-card-actions>
           <v-card-actions v-if="userIsCreator"> 

@@ -36,12 +36,12 @@
   export default {
     data () {
       return {
-        shops: this.$store.getters.loadedShops
+        shops: this.$store.getters.loadedProduct
       }
     },
     computed: {
       shop () {
-        return this.$store.getters.loadedShop
+        return this.$store.getters.loadedProduct
       }
     }
   }

@@ -9,6 +9,8 @@ export const store = new Vuex.Store({
     loadedShops: null,
     loadedProducts: null,
     user: null,
+    userProfile: null,
+    resetPassword: null,
     loading: false,
     error: null
   },
@@ -57,6 +59,12 @@ export const store = new Vuex.Store({
     },
     setUser (state, payload) {
       state.user = payload
+    },
+    setUserProfile (state, payload) {
+      state.userProfile = payload
+    },
+    pwReset (state, payload) {
+      state.resetPassword = payload
     },
     setLoading (state, payload) {
       state.loading = payload
@@ -136,7 +144,7 @@ export const store = new Vuex.Store({
         description: payload.description,
         location: payload.location,
         creatorId: getters.user.id,
-        products: getters.loadedProducts
+        products: []
       }
       let imageUrl
       let key
@@ -258,7 +266,7 @@ export const store = new Vuex.Store({
         })
       // Reach out to firebase and store it
     },
-    signUserUp ({commit}, payload) {
+    signUserUp ({commit, getters}, payload) {
       commit('setLoading', true)
       commit('clearError')
       firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
@@ -268,9 +276,14 @@ export const store = new Vuex.Store({
             const newUser = {
               id: user.uid,
               followedUsers: [],
+              fullName: payload.fullName,
+              email: payload.email,
+              profileName: payload.profileName,
               fbKeys: {}
             }
             commit('setUser', newUser)
+            firebase.database().ref('/users/').child(newUser.id + '/profile').push(newUser)
+            commit('setUserProfile', newUser)
           }
         )
         .catch(
@@ -291,6 +304,9 @@ export const store = new Vuex.Store({
             const newUser = {
               id: user.uid,
               followedUsers: [],
+              fullName: payload.fullName,
+              email: payload.email,
+              profileName: payload.profileName,
               fbKeys: {}
             }
             commit('setUser', newUser)
@@ -304,12 +320,82 @@ export const store = new Vuex.Store({
           }
         )
     },
+    resetPassword ({commit}, payload) {
+      commit('setLoading', true)
+      firebase.auth().sendPasswordResetEmail(payload.emailPasswordReset)
+        .then(
+          pwReset => {
+            commit('setLoading', false)
+            const userReset = {
+              emailPasswordReset: payload.emailPasswordReset
+            }
+            commit('pwReset', userReset)
+          }
+        )
+        .catch(
+          error => {
+            commit('setLoading', false)
+            console.log(error)
+          }
+        )
+    },
     autoSignIn ({commit}, payload) {
       commit('setUser', {
         id: payload.uid,
         followedUsers: [],
-        fbKeys: {}
+        fbKeys: {},
+        fullName: payload.fullName,
+        email: payload.email,
+        profileName: payload.profileName
       })
+    },
+    fetchUserData ({commit, getters}) {
+      commit('setLoading', true)
+      firebase.database().ref('/users/' + getters.user.id + '/following/').once('value')
+        .then(data => {
+          const dataPairs = data.val()
+          let followedUsers = []
+          let swappedPairs = {}
+          for (let key in dataPairs) {
+            followedUsers.push(dataPairs[key])
+            swappedPairs[dataPairs[key]] = key
+          }
+          const updatedUser = {
+            id: getters.user.id,
+            followedUsers: followedUsers,
+            fbKeys: swappedPairs
+          }
+          commit('setLoading', false)
+          commit('setUser', updatedUser)
+        })
+        .catch(error => {
+          console.log(error)
+          commit('setLoading', false)
+        })
+    },
+    fetchUserProfileData ({commit, getters}, payload) {
+      commit('setLoading', true)
+      firebase.database().ref('/users/' + getters.user.id + '/profile/').once('value')
+        .then((data) => {
+          const profile = []
+          const obj = data.val()
+          for (let key in obj) {
+            profile.push({
+              id: getters.user.id,
+              fullName: obj[key].fullName,
+              email: obj[key].email,
+              profileName: obj[key].profileName
+            })
+          }
+          commit('setLoading', false)
+          commit('setUserProfile', profile)
+        })
+        .catch(
+          (error) => {
+            console.log(error)
+            commit('setLoading', false)
+          }
+        )
     },
     logout ({commit}) {
       firebase.auth().signOut()
@@ -324,7 +410,7 @@ export const store = new Vuex.Store({
       return state.loadedShops
     },
     featuredShops (state, getters) {
-      return getters.loadedShops.slice(0, 5)
+      return getters.loadedShops.slice(0, 3)
     },
     loadedShop (state) {
       return shopId => {
@@ -334,17 +420,20 @@ export const store = new Vuex.Store({
       }
     },
     loadedProducts (state) {
-      return state.loadedProducts
+      return state.loadedShops
     },
     loadedProduct (state) {
       return productId => {
-        return state.loadedProducts.find((product) => {
+        return state.loadedShops.find((product) => {
           return product.id === productId
         })
       }
     },
     user (state) {
       return state.user
+    },
+    userProfile (state) {
+      return state.userProfile
     },
     loading (state) {
       return state.loading
