@@ -10,7 +10,6 @@ export const store = new Vuex.Store({
     loadedProducts: null,
     user: null,
     userProfile: null,
-    resetPassword: null,
     loading: false,
     error: null
   },
@@ -62,9 +61,6 @@ export const store = new Vuex.Store({
     },
     setUserProfile (state, payload) {
       state.userProfile = payload
-    },
-    pwReset (state, payload) {
-      state.resetPassword = payload
     },
     setLoading (state, payload) {
       state.loading = payload
@@ -316,25 +312,6 @@ export const store = new Vuex.Store({
           error => {
             commit('setLoading', false)
             commit('setError', error)
-            console.log(error)
-          }
-        )
-    },
-    resetPassword ({commit}, payload) {
-      commit('setLoading', true)
-      firebase.auth().sendPasswordResetEmail(payload.emailPasswordReset)
-        .then(
-          pwReset => {
-            commit('setLoading', false)
-            const userReset = {
-              emailPasswordReset: payload.emailPasswordReset
-            }
-            commit('pwReset', userReset)
-          }
-        )
-        .catch(
-          error => {
-            commit('setLoading', false)
             console.log(error)
           }
         )

@@ -65,7 +65,7 @@
         </v-btn>        
         <v-btn 
         v-if="userHasProfile"
-        :to="'/profile/' + userProfile.fullName"
+        :to="'/profile/' + userHasProfile"
         fab 
         style="color: #212121" 
         small 
@@ -81,7 +81,6 @@
   export default {
     data () {
       return {
-        props: ['user.id'],
         drawer: null,
         navItems: [
           { icon: 'home', title: 'Home', link: '/' },
@@ -118,14 +117,12 @@
       },
       user () {
         return this.$store.getters.user
-      },
-      userProfile () {
-        return this.$store.getters.userProfile[0]
       }
     },
     methods: {
       onLogout () {
         this.$store.dispatch('logout')
+        this.$router.push('/signin')
       }
     }
   }

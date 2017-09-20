@@ -96,8 +96,7 @@
         e1: true,
         email: '',
         password: '',
-        pwReset: false,
-        emailPasswordReset: ''
+        pwReset: false
       }
     },
     computed: {
@@ -121,9 +120,6 @@
     methods: {
       onSignin () {
         this.$store.dispatch('signUserIn', {email: this.email, password: this.password})
-      },
-      resetPw () {
-        this.$store.dispatch('resetPassword', {emailPasswordReset: this.emailPasswordReset})
       },
       onDismissed () {
         this.$store.dispatch('clearError')

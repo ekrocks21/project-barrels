@@ -11,6 +11,10 @@
           <p class="primary--text mb-0">{{ userProfile.email }}</p>
           </div>
         </v-card-title>
+        <v-card-actions>
+        <v-spacer></v-spacer>
+          <v-btn class="info--text" flat="flat" @click="onLogout">Logout</v-btn>
+        </v-card-actions>
       </v-card>
     </v-flex>
   </v-layout>
@@ -50,6 +54,12 @@
       },
       shops () {
         return this.$store.getters.loadedShops
+      }
+    },
+    methods: {
+      onLogout () {
+        this.$store.dispatch('logout')
+        this.$router.push('/signin')
       }
     }
   }
