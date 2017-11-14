@@ -10,6 +10,7 @@ import CreateProduct from './components/Shop/CreateProduct.vue'
 import ShopProducts from './components/Shop/ShopProducts.vue'
 import FollowDialog from './components/Shop/FollowedUsers/FollowDialog.vue'
 import FavoritedProduct from './components/User/Favorites/FavoritedProducts.vue'
+import axios from 'axios'
 
 Vue.use(Vuetify)
 Vue.config.productionTip = false
@@ -27,6 +28,16 @@ new Vue({
   store,
   render: h => h(App),
   created () {
+    // var url = 'ec2-34-229-219-238.compute-1.amazonaws.com'
+    var url = 'https://spreadsheets.google.com/feeds/list/1LYypJ_Uk5paynPnN_cl9pvXD_ePIcVD4t88VJTazfrM/1/public/values?alt=json'
+    axios.get(url)
+    .then(response => {
+      console.log(response)
+    })
+    .catch(e => {
+      this.errors.push(e)
+    })
+
     firebase.initializeApp({
       apiKey: 'AIzaSyA9_vJFswjQLa_MwrcVfO6Llw6IyxmkZ3w',
       authDomain: 'barrels-646b4.firebaseapp.com',

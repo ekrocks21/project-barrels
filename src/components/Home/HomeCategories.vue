@@ -4,7 +4,7 @@
           <v-flex xs2 
           v-for="categories in categories"
           :key="categories.id"
-          class="hidden-xs-only mt-5">
+          class="hidden-xs-only mt-3">
             <v-card 
             id="home-main-categories-lg-card"
             raised

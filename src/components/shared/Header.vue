@@ -1,12 +1,12 @@
 <template>
  <v-layout class="mt-5">
     <v-navigation-drawer
+      app
       primary
       persistent
       v-model="drawer" 
       clipped
       disable-route-watcher
-      hide-overlay
     >
       <v-list dense>
         <v-list-tile
@@ -122,6 +122,7 @@
       },
       userHasProfile () {
         if (this.$store.getters.user !== null && this.$store.getters.user !== undefined) {
+          console.log(this.$store)
           return this.$store.getters.user.id
         }
       },

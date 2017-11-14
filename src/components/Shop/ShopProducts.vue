@@ -5,14 +5,14 @@
         :key="product.id" 
         class="mt-5">
         <v-card hover style="margin:10px">
-                <v-card-media
+                <a v-bind:href="product.productUrl" style="text-decoration:none"><v-card-media
                   :src="product.productImageUrl"
                   height="200px">
                 </v-card-media>
                 <v-card-text>
                 <p style="font-size:16px; line-height: 0px">{{ product.productName }}</p>
                 <p style="font-size:14px; line-height: 7px; margin-bottom: 0px">{{ product.productPrice }}</p>
-                </v-card-text>
+                </v-card-text></a>
 
                 <v-card-actions style="background-color: #fafafa">
                 <v-btn 
