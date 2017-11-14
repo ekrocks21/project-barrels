@@ -16,7 +16,7 @@
         v-for="shop in featuredShops" 
         :key="shop.id" 
         class="mb-2 mt-5">
-        <v-card hover style="margin:10px"> 
+        <router-link style="text-decoration: none" :to="'/shops/' + shop.id"><v-card hover style="margin:10px"> 
             <v-layout row>
               <v-flex xs12>  
                 <v-card-media
@@ -36,12 +36,12 @@
                     icon
                     style="cursor: pointer;" 
                     v-bind:ripple="{ class: 'info--text' }">
-                  <v-icon class="secondary--text">launch</v-icon>
+                  <v-icon class="primary--text">chevron_right</v-icon>
                   </v-btn>
                 </v-card-actions>
               </v-flex>
             </v-layout>
-        </v-card>
+        </v-card></router-link>
       </v-flex>
     </v-layout>
   </v-container>

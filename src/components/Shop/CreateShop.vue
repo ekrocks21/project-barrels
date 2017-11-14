@@ -3,15 +3,18 @@
      <v-layout row>
       <v-flex xs12 sm10 offset-sm1>
   <v-card raised class="mt-5 mb-5">
-    <v-layout row>
-      <v-flex xs12 sm6 offset-sm3 mt-5 mb-3>
-        <h4 class="headline primary--text" style="font-family: 'Product Sans'" >Create a GOOD Influence Shop</h4>
+  <div style="background-color: #ffffff">
+    <v-layout row ml-4 mr-4>
+      <v-flex xs12  mt-4 mb-2>
+        <h4 class=" headline" style="color: #212121; font-family: 'Product Sans'" >Create a Shop</h4>
       </v-flex>
     </v-layout>
-    <v-layout row>
+    </div>
+    <v-divider></v-divider>
+    <v-layout row ml-4 mr-4 mt-5>
       <v-flex xs12>
         <form @submit.prevent="onCreateShop">
-          <v-layout row>
+          <v-layout row ml-4 mr-4>
             <v-flex xs12 sm6 offset-sm3>
               <v-text-field
                 name="shopName"
@@ -21,7 +24,7 @@
                 ></v-text-field>
             </v-flex>
           </v-layout>
-          <v-layout row>
+          <v-layout row ml-4 mr-4>
             <v-flex xs12 sm6 offset-sm3>
               <v-text-field
                 name="tagLine"
@@ -31,7 +34,7 @@
                 ></v-text-field>
             </v-flex>
           </v-layout>
-          <v-layout row>
+          <v-layout row ml-4 mr-4>
             <v-flex xs12 sm6 offset-sm3>
               <v-text-field
                 name="description"
@@ -41,7 +44,7 @@
                 v-model="description"></v-text-field>
             </v-flex>
           </v-layout>
-          <v-layout row>
+          <v-layout row ml-4 mr-4>
             <v-flex xs12 sm6 offset-sm3>
               <v-text-field
                 name="location"
@@ -50,7 +53,7 @@
                 v-model="location"></v-text-field>
             </v-flex>
           </v-layout>
-          <v-layout row>
+          <v-layout row ml-4 mr-4>
             <v-flex xs12 sm6 offset-sm3>
               <img :src="imageUrl" height="150" class="mt-3 mb-0 ">
                <v-btn raised small class="primary--text" @click="onPickFile">Upload Image</v-btn>
@@ -62,7 +65,7 @@
                 @change="onFilePicked">
             </v-flex>
           </v-layout>      
-          <v-layout row>
+          <v-layout row ml-4 mr-4>
             <v-flex xs12 sm6 offset-sm3>
               <v-checkbox 
               v-bind:label="`I Agree to the Terms and Conditions`" v-model="shopTerms" 
@@ -72,7 +75,7 @@
               info></v-checkbox>
             </v-flex>
           </v-layout>
-          <v-layout row>
+          <v-layout row ml-4 mr-4>
             <v-flex xs12 sm6 offset-sm3>
               <v-btn
                 class="secondary mb-5"
@@ -99,10 +102,11 @@
         description: '',
         location: '',
         imageUrl: '',
-        shopTerms: '',
+        shopTerms: false,
         image: null
       }
     },
+    props: ['id'],
     computed: {
       formIsValid () {
         return this.shopName !== '' &&
@@ -122,7 +126,7 @@
           image: this.image
         }
         this.$store.dispatch('createShop', shopData)
-        this.$router.push('/shops')
+        this.$router.push('/profile/' + this.$store.getters.user.id)
       },
       onPickFile () {
         this.$refs.fileInput.click()

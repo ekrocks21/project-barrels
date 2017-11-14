@@ -10,6 +10,7 @@ export const store = new Vuex.Store({
     loadedProducts: null,
     user: null,
     userProfile: null,
+    userShop: null,
     loading: false,
     error: null
   },
@@ -61,6 +62,9 @@ export const store = new Vuex.Store({
     },
     setUserProfile (state, payload) {
       state.userProfile = payload
+    },
+    setUserShop (state, payload) {
+      state.userShop = payload
     },
     setLoading (state, payload) {
       state.loading = payload
@@ -152,17 +156,23 @@ export const store = new Vuex.Store({
         .then(key => {
           const filename = payload.image.name
           const ext = filename.slice(filename.lastIndexOf('.'))
-          return firebase.storage().ref('shops/' + key + '.' + ext).put(payload.image)
+          return firebase.storage().ref('shops/').child(key + '/shop-image/' + key + '.' + ext).put(payload.image)
         })
         .then(fileData => {
           imageUrl = fileData.metadata.downloadURLs[0]
           return firebase.database().ref('shops').child(key).update({imageUrl: imageUrl})
         })
-        .then(() => {
+        .then((data) => {
           commit('createShop', {
             ...shop,
             imageUrl: imageUrl,
-            id: key
+            id: key,
+            shopId: key
+          })
+          firebase.database().ref('/users/').child(getters.user.id + '/shop/').push(shop)
+          commit('setUserShop', {
+            ...shop,
+            shopId: key
           })
         })
         .catch((error) => {
@@ -244,7 +254,7 @@ export const store = new Vuex.Store({
         .then(key => {
           const filename = payload.productImage.name
           const ext = filename.slice(filename.lastIndexOf('.'))
-          return firebase.storage().ref('/shops/').child(payload.shopId + '/products/' + key + '.' + ext).put(payload.productImage)
+          return firebase.storage().ref('shops/').child(payload.shopId + '/products/' + key + '.' + ext).put(payload.productImage)
         })
         .then(fileData => {
           productImageUrl = fileData.metadata.downloadURLs[0]
@@ -374,6 +384,34 @@ export const store = new Vuex.Store({
           }
         )
     },
+    fetchUserShopData ({commit, getters}, payload) {
+      commit('setLoading', true)
+      firebase.database().ref('/users/' + getters.user.id + '/shop/').once('value')
+        .then((data) => {
+          const shop = []
+          const obj = data.val()
+          for (let key in obj) {
+            shop.push({
+              shopName: obj[key].shopName,
+              tagLine: obj[key].tagLine,
+              description: obj[key].description,
+              imageUrl: obj[key].imageUrl,
+              location: obj[key].location,
+              creatorId: obj[key].creatorId,
+              products: obj[key].products,
+              shopId: obj[key].shopId
+            })
+          }
+          commit('setLoading', false)
+          commit('setUserShop', shop)
+        })
+        .catch(
+          (error) => {
+            console.log(error)
+            commit('setLoading', false)
+          }
+        )
+    },
     logout ({commit}) {
       firebase.auth().signOut()
       commit('setUser', null)
@@ -411,6 +449,9 @@ export const store = new Vuex.Store({
     },
     userProfile (state) {
       return state.userProfile
+    },
+    userShop (state) {
+      return state.userShop
     },
     loading (state) {
       return state.loading

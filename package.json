@@ -11,6 +11,8 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "amazon-product-api": "^0.4.4",
+    "apac": "^3.0.2",
     "firebase": "^4.3.0",
     "vue": "^2.4.2",
     "vue-router": "^2.6.0",

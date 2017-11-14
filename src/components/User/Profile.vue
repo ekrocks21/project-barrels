@@ -12,6 +12,14 @@
           </div>
         </v-card-title>
         <v-card-actions>
+        <v-btn
+          v-if="userShop !== false"
+          fab
+          small
+          style="color: #212121"
+          v-bind:href="'/shops/' + userShop.shopId">
+          <v-icon>store</v-icon>
+        </v-btn>  
         <v-spacer></v-spacer>
           <v-btn class="info--text" flat="flat" @click="onLogout">Logout</v-btn>
         </v-card-actions>
@@ -51,6 +59,9 @@
       },
       userProfile () {
         return this.$store.getters.userProfile[0]
+      },
+      userShop () {
+        return this.$store.getters.userShop
       },
       shops () {
         return this.$store.getters.loadedShops

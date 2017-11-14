@@ -15,6 +15,12 @@
                 </v-card-text>
 
                 <v-card-actions style="background-color: #fafafa">
+                <v-btn 
+                  v-if="userIsCreator"
+                  icon
+                  icon style="cursor: pointer">
+                  <v-icon class="primary--text">delete_forever</v-icon>
+                </v-btn>  
                 <v-spacer></v-spacer>
 
                   <v-btn 
@@ -46,6 +52,12 @@
       },
       userIsAuthenticated () {
         return this.$store.getters.user !== null && this.$store.getters.user !== undefined
+      },
+      userIsCreator () {
+        if (!this.userIsAuthenticated) {
+          return false
+        }
+        return this.$store.getters.user.id === this.shop.creatorId
       }
     }
   }

@@ -62,7 +62,17 @@
         class="mr-3"
         v-bind:ripple="{ class: 'secondary--text' }">
           <v-icon>{{ item.icon }}</v-icon>
-        </v-btn>        
+        </v-btn>  
+        <v-btn 
+        v-if="userHasProfile"
+        :to="'/profile/' + userHasProfile"
+        fab 
+        style="color: #212121" 
+        small 
+        class="mr-3"
+        v-bind:ripple="{ class: 'secondary--text' }">
+          <v-icon>store</v-icon>
+        </v-btn>      
         <v-btn 
         v-if="userHasProfile"
         :to="'/profile/' + userHasProfile"
@@ -115,8 +125,14 @@
           return this.$store.getters.user.id
         }
       },
+      userProfile () {
+        return this.$store.getters.userProfile[0]
+      },
       user () {
         return this.$store.getters.user
+      },
+      userShop () {
+        return this.$store.getters.userShop
       }
     },
     methods: {

@@ -4,11 +4,11 @@
     <v-icon>add</v-icon>
   </v-btn>
   <v-card>
-    <v-toolbar dark class="primary">
+    <v-toolbar style="background-color: #212121">
       <v-btn icon @click.native="addProductDialog = false" dark>
         <v-icon>close</v-icon>
       </v-btn>
-      <v-toolbar-title style="font-family:'Product Sans'">GOOD Influence</v-toolbar-title>
+      <v-toolbar-title style="color: #ffffff; font-family:'Product Sans'">GOOD Influence</v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
   <v-container>
@@ -91,7 +91,7 @@
             </v-flex>
           </v-layout>      
           <v-layout row>
-            <v-flex xs12 sm6 offset-sm3>
+            <v-flex xs12 sm6 offset-sm3 mt-5>
               <v-btn
                 class="secondary mb-5"
                 @click.native="addProductDialog = false"

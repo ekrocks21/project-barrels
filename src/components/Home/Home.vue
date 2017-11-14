@@ -19,6 +19,14 @@
       HomeCategories: HomeCategories,
       FeaturedGiver: FeaturedGiver,
       HomeProducts: HomeProducts
+    },
+    computed: {
+      userProfile () {
+        return this.$store.getters.userProfile[0]
+      },
+      shops () {
+        return this.$store.getters.loadedShops
+      }
     }
   }
 </script>
