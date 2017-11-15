@@ -11,6 +11,7 @@
 
 <script>
   export default {
+    props: ['productId'],
     data () {
       return {
         favoriteDialog: false,
@@ -23,11 +24,10 @@
       },
       productIsFavorite () {
         return this.$store.getters.user.favoritedProducts.findIndex(products => {
-          return products.id === this.productId
+          return products.id === this.$store.getters.productId
         }) >= 0
       }
     },
-    props: ['productId'],
     methods: {
       onFavorite () {
         if (this.productIsFavorite) {
