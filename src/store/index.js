@@ -172,6 +172,8 @@ export const store = new Vuex.Store({
           firebase.database().ref('/users/').child(getters.user.id + '/shop/').push(shop)
           commit('setUserShop', {
             ...shop,
+            imageUrl: imageUrl,
+            id: key,
             shopId: key
           })
         })

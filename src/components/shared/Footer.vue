@@ -2,7 +2,7 @@
   <v-footer id="footer">
     <span id="footer-links"><router-link to="/about">About</router-link></span> 
     <span id="footer-links"><router-link to="/createshop">Become a Giver</router-link></span> 
-
+    <v-spacer></v-spacer>
       <span id="footer-links-last">&copy; 2017 GOOD Influence</span>
   </v-footer>
 </template>

@@ -1,17 +1,9 @@
 <template>
       <v-container grid-list-md class="mt-5">
-        <div>
-    <v-breadcrumbs divider="/">
-      <v-breadcrumbs-item 
-        v-for="bread in breads" :key="bread.text"
-        :disabled="bread.disabled" to="/categories" class="mb-4"
-      >
-        {{ bread.text }}
-      </v-breadcrumbs-item>
-    </v-breadcrumbs>
-  </div>
+        <router-link id="header-link" to="/electronics" ><h3 class="hidden-md-and-up mb-3 ml-3 primary--text headline" style="text-align: left">Tech &amp; Electronics</h3></router-link>
+       <router-link id="header-link" to="/electronics" > <h3 class="hidden-sm-and-down mt-3 mb-5 primary--text headline" style="text-align: left">Tech &amp; Electronics</h3></router-link> 
         <v-layout row wrap mb-5>
-          <v-flex xs6 sm3
+          <v-flex xs12 sm3
           v-for="(item, i) in items"
           :key="i"
           class="mt-0">
@@ -59,16 +51,6 @@
   export default {
     data () {
       return {
-        breads: [
-          {
-            text: 'Categories',
-            disabled: false
-          },
-          {
-            text: 'Arts & Crafts',
-            disabled: true
-          }
-        ],
         items: [
           { image: '../static/google-home.png', name: 'Google Home', price: '$99.99', url: 'http://www.amazon.com' },
           { image: '../static/google-home.png', name: 'Google Home', price: '$99.99', url: 'http://www.amazon.com' },
@@ -92,6 +74,14 @@
   color: #607D8B;
   text-align: left;
   padding-top: 5px;
+}
+
+#header-link {
+    text-decoration: none;
+}
+
+#header-link:hover {
+    text-decoration: underline;
 }
 
 #product-launch-icon {

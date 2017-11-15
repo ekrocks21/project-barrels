@@ -1,7 +1,7 @@
 <template>
  <v-container>
   <v-layout>
-    <v-flex xs12 sm12 mt-3>
+    <v-flex xs12 sm12 mt-5>
       <v-card class="mb-5" flat>
         <v-card-media src="/static/about.png" height="200px">
         </v-card-media>

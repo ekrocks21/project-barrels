@@ -11,7 +11,7 @@
     </v-layout>
     <v-layout row wrap v-else>
       <v-flex xs12 class="mt-5">
-        <v-card flat>
+        <v-card >
           <v-card-title>
             <h4 style="color:#212121; font-size:22px">{{ shop.shopName }}</h4>
             <template v-if="userIsCreator">

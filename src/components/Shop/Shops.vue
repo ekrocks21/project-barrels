@@ -1,5 +1,7 @@
 <template>
-  <v-container>
+  <v-container grid-list-md class="mt-5">
+    <h3 class="hidden-md-and-up mb-3 ml-3  primary--text headline" style="text-align: left">Featured Shops</h3>
+        <h3 class="hidden-sm-and-down mt-3 mb-5 ml-3 primary--text headline" style="text-align: left">Featured Shops</h3>
   <v-layout row wrap v-if="loading">
       <v-flex xs12 class="text-xs-center">
         <v-progress-circular
@@ -15,8 +17,8 @@
       <v-flex xs12 sm4
         v-for="shop in shops" 
         :key="shop.id" 
-        class="mb-2 mt-5">
-        <v-card hover style="margin:10px"> 
+        class="mb-2">
+        <router-link :to="'/shops/' + shop.id" style="text-decoration: none"> <v-card hover style="margin:10px"> 
             <v-layout row>
               <v-flex xs12>  
                 <v-card-media
@@ -41,7 +43,7 @@
                 </v-card-actions>
               </v-flex>
             </v-layout>
-        </v-card>
+        </v-card></router-link>
       </v-flex>
     </v-layout>
   </v-container>

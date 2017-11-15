@@ -1,5 +1,7 @@
 <template>
-  <v-container fluid>
+  <v-container grid-list-sm>
+    <router-link id="header-link" to="/shops" ><h3 class="hidden-md-and-up mb-3 ml-3 mt-0 primary--text headline" style="text-align: left">Featured Givers</h3></router-link>
+       <router-link id="header-link" to="/shops" > <h3 class="hidden-sm-and-down mb-5 mt-5 primary--text headline" style="text-align: left">Featured Givers</h3></router-link>  
   <v-layout row wrap v-if="loading">
       <v-flex xs12 class="text-xs-center">
         <v-progress-circular
@@ -15,7 +17,7 @@
       <v-flex xs12 sm4
         v-for="shop in featuredShops" 
         :key="shop.id" 
-        class="mb-2 mt-5">
+        class="mb-5">
         <router-link style="text-decoration: none" :to="'/shops/' + shop.id"><v-card hover style="margin:10px"> 
             <v-layout row>
               <v-flex xs12>  
@@ -30,7 +32,7 @@
             </v-layout>
             <v-layout>
               <v-flex xs12>
-                <v-card-actions style="background-color: #fafafa">
+                <v-card-actions style="background-color: #ffffff">
                  <v-spacer></v-spacer>
                   <v-btn :to="'/shops/' + shop.id"
                     icon
@@ -59,3 +61,15 @@
     }
   }
 </script> 
+
+<style scoped>
+
+#header-link {
+    text-decoration: none;
+}
+
+#header-link:hover {
+    text-decoration: underline;
+}
+
+</style>

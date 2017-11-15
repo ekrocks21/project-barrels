@@ -6,16 +6,30 @@
       persistent
       v-model="drawer" 
       clipped
+      :mini-variant="mini"
       disable-route-watcher
+      enable-resize-watcher 
     >
       <v-list dense>
+       <v-list class="pa-0">
+        <v-list-tile avatar>
+         <router-link to='/' style="text-decoration: none"> <v-list-tile-avatar>
+            <img src="/static/G-logo.svg" />
+          </v-list-tile-avatar></router-link>
+          <v-list-tile-action>
+            <v-btn icon @click.native.stop="mini = !mini">
+              <v-icon>chevron_left</v-icon>
+            </v-btn>
+          </v-list-tile-action>
+        </v-list-tile>
+      </v-list>  
         <v-list-tile
           v-for="navItems in navItems"
           :key="navItems.icon"
           :to="navItems.link"
           >
           <v-list-tile-action>
-            <v-icon id="nav-drawer-icon" v-html="navItems.icon"></v-icon>
+            <v-icon style="color: #212121" id="nav-drawer-icon" v-html="navItems.icon"></v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title id="nav-drawer-title" v-text="navItems.title"></v-list-tile-title>
@@ -25,7 +39,7 @@
           v-if="userIsAuthenticated"
           @click="onLogout">
           <v-list-tile-action>
-            <v-icon>exit_to_app</v-icon>
+            <v-icon style="color: #212121" >exit_to_app</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>Logout</v-list-tile-content>
         </v-list-tile>
@@ -33,9 +47,9 @@
           v-else
           to="/signin">
           <v-list-tile-action>
-            <v-icon>person</v-icon>
+            <v-icon style="color: #212121" >person</v-icon>
           </v-list-tile-action>
-          <v-list-tile-content>Sign In</v-list-tile-content>
+          <v-list-tile-content style="color: #212121" >Sign In</v-list-tile-content>
         </v-list-tile>
       </v-list>
 
@@ -44,7 +58,6 @@
     <v-toolbar 
     fixed 
     style='background-color: #ffffff'>
-      <v-toolbar-side-icon v-bind:ripple="{ class: 'secondary--text' }" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title id='logo'><router-link to='/'
       style="font-family: 'Product Sans';
       color: #212121 !important; text-decoration: none">
@@ -88,23 +101,39 @@
 </template>
 
 <script>
+  import firebase from 'firebase'
   export default {
     data () {
       return {
-        drawer: null,
+        photo: '',
+        userId: '',
+        name: '',
+        email: '',
+        user: {},
+        mini: true,
+        drawer: true,
+        right: null,
         navItems: [
-          { icon: 'home', title: 'Home', link: '/' },
           { icon: 'store', title: 'Featured Shops', link: '/shops' },
           { icon: 'explore', title: 'Categories', link: '/categories' },
-          { title: 'Home & Living', link: '/household' },
-          { title: 'Health & Beauty', link: '/health' },
-          { title: 'Arts & Crafts', link: '/arts' },
-          { title: 'Kids & Baby', link: '/kids' },
-          { title: 'Electronics', link: '/electronics' },
-          { title: 'Sports & Outdoors', link: '/outdoors' },
+          { icon: 'hotel', title: 'Home & Living', link: '/household' },
+          { icon: 'healing', title: 'Health & Beauty', link: '/health' },
+          { icon: 'palette', title: 'Arts & Crafts', link: '/arts' },
+          { icon: 'child_friendly', title: 'Kids & Baby', link: '/kids' },
+          { icon: 'important_devices', title: 'Electronics', link: '/electronics' },
+          { icon: 'fitness_center', title: 'Sports & Outdoors', link: '/outdoors' },
           { icon: 'favorite_border', title: 'Favorites', link: '/give' },
           { icon: 'info_outline', title: 'About', link: '/about' }
         ]
+      }
+    },
+    created () {
+      this.user = firebase.auth().currentUser
+      if (this.user) {
+        this.name = this.user.displayName
+        this.email = this.user.email
+        this.photo = this.user.photoURL
+        this.userId = this.user.uid
       }
     },
     computed: {

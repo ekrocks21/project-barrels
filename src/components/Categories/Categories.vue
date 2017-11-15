@@ -1,5 +1,5 @@
 <template>
-      <v-container fluid grid-list-md>
+      <v-container grid-list-lg>
         <v-layout row wrap mb-5>
           <v-flex xs12 sm4
           v-for="categories in categories"
@@ -31,7 +31,7 @@
         categories: [
           { image: '../static/kitchen-dining.svg', name: 'Home & Living', id: 'household' },
           { image: '../static/health-beauty.svg', name: 'Health & Beauty', id: 'health' },
-          { image: '../static/art-paint.svg', name: 'Arts & Crafts', id: 'art' },
+          { image: '../static/art-paint.svg', name: 'Arts & Crafts', id: 'arts' },
           { image: '../static/kids-baby.svg', name: 'Kids & Baby', id: 'kids' },
           { image: '../static/tech-electronics.svg', name: 'Electronics', id: 'electronics' },
           { image: '../static/sports-outdoors.svg', name: 'Sports & Outdoors', id: 'outdoors' }

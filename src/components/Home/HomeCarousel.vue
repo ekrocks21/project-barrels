@@ -1,6 +1,6 @@
 <template>
-  <v-container fluid>
-   <v-layout row wrap class="mt-5 hidden-xs-only">
+  <v-container>
+   <v-layout row wrap class="mt-5  hidden-xs-only">
       <v-flex xs12>
         <v-carousel>
           <v-carousel-item 

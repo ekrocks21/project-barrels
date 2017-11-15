@@ -1,13 +1,12 @@
 <template>
-      <v-container fluid grid-list-md>
+      <v-container grid-list-sm>
         <v-layout row wrap>
-          <v-flex xs2 
+          <v-flex xs6 sm2
           v-for="categories in categories"
           :key="categories.id"
-          class="hidden-xs-only mt-3">
+          class="mt-3 mb-5">
             <v-card 
             id="home-main-categories-lg-card"
-            raised
             hover
             class="ma-3"
             @click="onLoadCategories (categories.id )"
@@ -30,8 +29,8 @@
     data () {
       return {
         categories: [
-          { image: './static/kitchen-dining.svg', id: 'household', name: 'Home & Living' },
-          { image: './static/sports-outdoors.svg', id: 'outdoors', name: 'Sports & Outdoors' },
+          { image: './static/kitchen-dining.svg', id: 'household', name: 'Home' },
+          { image: './static/sports-outdoors.svg', id: 'outdoors', name: 'Sports' },
           { image: './static/health-beauty.svg', id: 'health', name: 'Health & Beauty' },
           { image: './static/kids-baby.svg', id: 'kids', name: 'Kids & Baby' },
           { image: './static/tech-electronics.svg', id: 'electronics', name: 'Electronics' },
@@ -49,5 +48,12 @@
 
 <style scoped>
 
- 
+#header-link {
+    text-decoration: none;
+}
+
+#header-link:hover {
+    text-decoration: underline;
+}
+
 </style>

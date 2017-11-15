@@ -1,7 +1,15 @@
 <template>
-      <v-container fluid grid-list-md class="mt-5">
-        <h3 class="hidden-md-and-up mb-3 ml-3 primary--text headline" style="text-align: left">Home &amp; Living</h3>
-        <h3 class="hidden-sm-and-down mt-3 mb-5 ml-3 primary--text headline" style="text-align: left">Home &amp; Living</h3>
+      <v-container grid-list-md class="mt-5">
+                <div>
+    <v-breadcrumbs divider="/">
+      <v-breadcrumbs-item 
+        v-for="bread in breads" :key="bread.text"
+        :disabled="bread.disabled" to="/categories" class="mb-4"
+      >
+        {{ bread.text }}
+      </v-breadcrumbs-item>
+    </v-breadcrumbs>
+  </div>
         <v-layout row wrap mb-5>
           <v-flex xs12 sm3
           v-for="(item, i) in items"
@@ -51,6 +59,16 @@
   export default {
     data () {
       return {
+        breads: [
+          {
+            text: 'Categories',
+            disabled: false
+          },
+          {
+            text: 'Home & Living',
+            disabled: true
+          }
+        ],
         items: [
           { image: '../static/google-home.png', name: 'Google Home', price: '$99.99', url: 'http://www.amazon.com' },
           { image: '../static/google-home.png', name: 'Google Home', price: '$99.99', url: 'http://www.amazon.com' },
