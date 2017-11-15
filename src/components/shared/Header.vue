@@ -66,26 +66,25 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
         <v-btn 
-        v-for="item in menuItems"
-        :key="item.icon"
-        :to="item.link"
-        fab 
-        style="color: #212121" 
-        small 
-        class="mr-3"
-        v-bind:ripple="{ class: 'secondary--text' }">
-          <v-icon>{{ item.icon }}</v-icon>
-        </v-btn>  
-        <v-btn 
-        v-if="userHasProfile"
-        :to="'/profile/' + userHasProfile"
+        v-if="userHasShop"
+        :to="'/shops/' + userHasShop"
         fab 
         style="color: #212121" 
         small 
         class="mr-3"
         v-bind:ripple="{ class: 'secondary--text' }">
           <v-icon>store</v-icon>
-        </v-btn>      
+        </v-btn> 
+        <v-btn 
+        v-else
+        :to="'/createshop'"
+        fab 
+        style="color: #212121" 
+        small 
+        class="mr-3"
+        v-bind:ripple="{ class: 'secondary--text' }">
+          <v-icon>store</v-icon>
+        </v-btn>   
         <v-btn 
         v-if="userHasProfile"
         :to="'/profile/' + userHasProfile"
@@ -95,7 +94,17 @@
         class="mr-3"
         v-bind:ripple="{ class: 'secondary--text' }">
           <v-icon>person</v-icon>
-        </v-btn>     
+        </v-btn>    
+                <v-btn 
+        v-else
+        :to="'/signin/'"
+        fab 
+        style="color: #212121" 
+        small 
+        class="mr-3"
+        v-bind:ripple="{ class: 'secondary--text' }">
+          <v-icon>person</v-icon>
+        </v-btn> 
     </v-toolbar>
    </v-layout> 
 </template>
@@ -161,8 +170,14 @@
       user () {
         return this.$store.getters.user
       },
+      userHasShop () {
+        if (this.$store.getters.userShop !== null && this.$store.getters.userShop !== undefined) {
+          console.log(this.$store)
+          return this.$store.getters.userShop[0].shopId
+        }
+      },
       userShop () {
-        return this.$store.getters.userShop
+        return this.$store.getters.userShop[0]
       }
     },
     methods: {

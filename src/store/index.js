@@ -28,6 +28,19 @@ export const store = new Vuex.Store({
       followedUsers.splice(followedUsers.findIndex(shop => shop.id === payload), 1)
       Reflect.deleteProperty(state.user.fbKeys, payload)
     },
+    favoriteProduct (state, payload) {
+      const id = payload.id
+      if (state.user.favoriteProducts.findIndex(products => products.id === id) >= 0) {
+        return
+      }
+      state.user.favoriteProducts.push(id)
+      state.user.fbKeys[id] = payload.fbKey
+    },
+    unFavoriteProduct (state, payload) {
+      const favoriteProducts = state.user.favoriteProducts
+      favoriteProducts.splice(favoriteProducts.findIndex(products => products.id === payload), 1)
+      Reflect.deleteProperty(state.user.fbKeys, payload)
+    },
     setLoadedShops (state, payload) {
       state.loadedShops = payload
     },
@@ -109,6 +122,38 @@ export const store = new Vuex.Store({
           commit('setLoading', false)
         })
     },
+    favoriteProduct ({commit, getters}, payload) {
+      commit('setLoading', true)
+      const user = getters.user
+      firebase.database().ref('/users/' + user.id).child('/favorites/')
+        .push(payload)
+        .then(data => {
+          commit('setLoading', false)
+          commit('favoriteProduct', {id: payload, fbKey: data.key})
+        })
+        .catch(error => {
+          console.log(error)
+          commit('setLoading', false)
+        })
+    },
+    unFavoriteProduct ({commit, getters}, payload) {
+      commit('setLoading', true)
+      const user = getters.user
+      if (!user.fbKeys) {
+        return
+      }
+      const fbKey = user.fbKeys[payload]
+      firebase.database().ref('/users/' + user.id + '/favorites/').child(fbKey)
+        .remove()
+        .then(() => {
+          commit('setLoading', false)
+          commit('unFavoriteProduct', payload)
+        })
+        .catch(error => {
+          console.log(error)
+          commit('setLoading', false)
+        })
+    },
     loadShops ({commit}) {
       commit('setLoading', true)
       firebase.database().ref('shops').once('value')
@@ -169,11 +214,10 @@ export const store = new Vuex.Store({
             id: key,
             shopId: key
           })
-          firebase.database().ref('/users/').child(getters.user.id + '/shop/').push(shop)
+          const shopId = key
+          firebase.database().ref('/users/').child(getters.user.id + '/shop/').push(shop).update({shopId: shopId})
           commit('setUserShop', {
             ...shop,
-            imageUrl: imageUrl,
-            id: key,
             shopId: key
           })
         })
@@ -266,7 +310,8 @@ export const store = new Vuex.Store({
           commit('createProduct', {
             ...product,
             productImageUrl: productImageUrl,
-            id: key
+            id: key,
+            productId: key
           })
         })
         .catch((error) => {
@@ -362,6 +407,30 @@ export const store = new Vuex.Store({
           commit('setLoading', false)
         })
     },
+    fetchUserProductFavData ({commit, getters}) {
+      commit('setLoading', true)
+      firebase.database().ref('/users/' + getters.user.id + '/favorites/').once('value')
+        .then(data => {
+          const dataPairs = data.val()
+          let favoriteProducts = []
+          let swappedPairs = {}
+          for (let key in dataPairs) {
+            favoriteProducts.push(dataPairs[key])
+            swappedPairs[dataPairs[key]] = key
+          }
+          const updatedUser = {
+            id: getters.user.id,
+            favoriteProducts: favoriteProducts,
+            fbKeys: swappedPairs
+          }
+          commit('setLoading', false)
+          commit('setUser', updatedUser)
+        })
+        .catch(error => {
+          console.log(error)
+          commit('setLoading', false)
+        })
+    },
     fetchUserProfileData ({commit, getters}, payload) {
       commit('setLoading', true)
       firebase.database().ref('/users/' + getters.user.id + '/profile/').once('value')
@@ -397,10 +466,8 @@ export const store = new Vuex.Store({
               shopName: obj[key].shopName,
               tagLine: obj[key].tagLine,
               description: obj[key].description,
-              imageUrl: obj[key].imageUrl,
               location: obj[key].location,
               creatorId: obj[key].creatorId,
-              products: obj[key].products,
               shopId: obj[key].shopId
             })
           }

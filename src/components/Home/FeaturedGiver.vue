@@ -18,21 +18,25 @@
         v-for="shop in featuredShops" 
         :key="shop.id" 
         class="mb-5">
-        <router-link style="text-decoration: none" :to="'/shops/' + shop.id"><v-card hover style="margin:10px"> 
+       <v-card hover style="margin:10px"> 
             <v-layout row>
               <v-flex xs12>  
-                <v-card-media
+                <router-link style="text-decoration: none" :to="'/shops/' + shop.id"> <v-card-media
                   :src="shop.imageUrl"
                   height="200px">
                 </v-card-media>
                 <v-card-text>
                 <div style="font-size:20px; font-family: 'Product Sans'">{{ shop.shopName }}</div>
-                </v-card-text>
+                </v-card-text></router-link>
               </v-flex>
             </v-layout>
             <v-layout>
               <v-flex xs12>
                 <v-card-actions style="background-color: #ffffff">
+                   <follow-dialog
+                :shopId="shop.id"
+                v-if="userIsAuthenticated">
+              </follow-dialog>
                  <v-spacer></v-spacer>
                   <v-btn :to="'/shops/' + shop.id"
                     icon
@@ -43,7 +47,7 @@
                 </v-card-actions>
               </v-flex>
             </v-layout>
-        </v-card></router-link>
+        </v-card>
       </v-flex>
     </v-layout>
   </v-container>
@@ -51,12 +55,16 @@
 
 <script>
   export default {
+    props: ['shopId'],
     computed: {
       featuredShops () {
         return this.$store.getters.featuredShops
       },
       loading () {
         return this.$store.getters.loading
+      },
+      userIsAuthenticated () {
+        return this.$store.getters.user !== null && this.$store.getters.user !== undefined
       }
     }
   }

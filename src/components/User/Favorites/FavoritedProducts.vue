@@ -22,12 +22,12 @@
         return this.$store.getters.loadedShop(this.shopId)
       },
       productIsFavorite () {
-        return this.$store.getters.user.favoritedProducts.findIndex(productId => {
-          return productId === this.productId
+        return this.$store.getters.user.favoritedProducts.findIndex(products => {
+          return products.id === this.productId
         }) >= 0
       }
     },
-    props: ['shopId'],
+    props: ['productId'],
     methods: {
       onFavorite () {
         if (this.productIsFavorite) {

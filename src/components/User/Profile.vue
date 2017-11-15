@@ -13,13 +13,14 @@
         </v-card-title>
         <v-card-actions>
         <v-btn
-          v-if="userShop !== false"
+          v-if="userHasShop !== false"
           fab
+          slot="activator"
           small
           style="color: #212121"
-          v-bind:href="'/shops/' + userShop.shopId">
+          v-bind:href="'/shops/' + userHasShop">
           <v-icon>store</v-icon>
-        </v-btn>  
+        </v-btn> 
         <v-spacer></v-spacer>
           <v-btn class="info--text" flat="flat" @click="onLogout">Logout</v-btn>
         </v-card-actions>
@@ -60,8 +61,11 @@
       userProfile () {
         return this.$store.getters.userProfile[0]
       },
-      userShop () {
-        return this.$store.getters.userShop
+      userHasShop () {
+        if (this.$store.getters.userShop !== null && this.$store.getters.userShop !== undefined) {
+          console.log(this.$store)
+          return this.$store.getters.userShop[0].shopId
+        }
       },
       shops () {
         return this.$store.getters.loadedShops

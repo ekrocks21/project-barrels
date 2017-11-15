@@ -22,6 +22,10 @@
                   <v-icon class="primary--text">delete_forever</v-icon>
                 </v-btn>  
                 <v-spacer></v-spacer>
+                <favorite-product
+                :products="products.id"
+                v-if="userIsAuthenticated">
+              </favorite-product>
 
                   <v-btn 
                     icon
@@ -45,7 +49,7 @@
         products: this.$store.getters.loadedShop(this.shopId).products
       }
     },
-    props: ['shopId'],
+    props: ['shopId', 'products.id'],
     computed: {
       shop () {
         return this.$store.getters.loadedShop(this.shopId)
