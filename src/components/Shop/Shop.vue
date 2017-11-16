@@ -13,7 +13,8 @@
       <v-flex xs12 class="mt-5">
         <v-card >
           <v-card-title>
-            <h4 style="color:#212121; font-size:22px">{{ shop.shopName }}</h4>
+            <h4 class="primary--text" style="margin: 0; font-size:22px; font-family: 'Product Sans'">{{ shop.shopName }}</h4>
+            
             <template v-if="userIsCreator">
               <v-spacer></v-spacer>
               <edit-shop :shop="shop"></edit-shop>
@@ -27,22 +28,22 @@
             height="200px"
           ></v-card-media>
           <v-card-text>
-            <div style="font-size:16px">{{ shop.tagLine }}</div>
+            <div style="margin: 0; font-size:16px;">{{ shop.tagLine }}</div>
           </v-card-text>
         <v-card-actions v-if="userIsCreator !== true">
           <v-dialog v-model="dialog" lazy absolute>
             <v-btn flat small class="primary--text" slot="activator"><v-icon>more_horiz</v-icon></v-btn>
               <v-card>
                <v-card-title>
-                <div class="headline">About {{ shop.shopName }}</div>
+                <div style="text-transform: uppercase; font-size: 16px; font-weight: 500">  {{ shop.shopName }}</div>
                 </v-card-title>
-                
-                <v-card-text> {{ shop.description }} </v-card-text>
-                <v-card-text><v-icon left>location_on</v-icon> {{ shop.location }} </v-card-text>
                 <v-divider></v-divider>
+                <v-card-text><v-icon style="color: #212121" left>location_on</v-icon> {{ shop.location }} </v-card-text>
+                <v-card-text> {{ shop.description }} </v-card-text>
+                
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn class="info--text" flat="flat" @click.native="dialog = false">Shop</v-btn>
+                  <v-btn class="secondary--text" flat="flat" @click.native="dialog = false">Shop</v-btn>
                 </v-card-actions>
               </v-card>
            </v-dialog>

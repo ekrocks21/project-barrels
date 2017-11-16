@@ -21,6 +21,15 @@
           v-bind:href="'/shops/' + userHasShop">
           <v-icon>store</v-icon>
         </v-btn> 
+          <v-btn
+          v-else
+          fab
+          slot="activator"
+          small
+          style="color: #212121"
+          v-bind:href="'/shops/'">
+          <v-icon>store</v-icon>
+        </v-btn> 
         <v-spacer></v-spacer>
           <v-btn class="info--text" flat="flat" @click="onLogout">Logout</v-btn>
         </v-card-actions>
@@ -31,26 +40,7 @@
 </template>
 
 <script>
-  import firebase from 'firebase'
   export default {
-    data () {
-      return {
-        photo: '',
-        userId: '',
-        name: '',
-        email: '',
-        user: {}
-      }
-    },
-    created () {
-      this.user = firebase.auth().currentUser
-      if (this.user) {
-        this.name = this.user.displayName
-        this.email = this.user.email
-        this.photo = this.user.photoURL
-        this.userId = this.user.uid
-      }
-    },
     computed: {
       userInfo () {
         return this.$store.getters.user

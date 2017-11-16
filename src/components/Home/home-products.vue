@@ -29,7 +29,7 @@
                 style="cursor: pointer"
                 v-bind:ripple="{ class: 'secondary--text' }"
                 >
-                  <v-icon class="secondary--text">favorite_outline</v-icon>
+                  <v-icon style="color: #212121">favorite_outline</v-icon>
                 </v-btn>
 
                 <v-btn 

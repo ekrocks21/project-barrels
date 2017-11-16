@@ -12,21 +12,75 @@
     >
       <v-list dense>
        <v-list class="pa-0">
-        <v-list-tile avatar>
+        <v-list-tile avatar v-bind:ripple="{ class: 'secondary--text' }">
          <router-link to='/' style="text-decoration: none"> <v-list-tile-avatar>
             <img src="/static/G-logo.svg" />
           </v-list-tile-avatar></router-link>
-          <v-list-tile-action>
-            <v-btn icon @click.native.stop="mini = !mini">
-              <v-icon>chevron_left</v-icon>
-            </v-btn>
-          </v-list-tile-action>
         </v-list-tile>
       </v-list>  
         <v-list-tile
           v-for="navItems in navItems"
           :key="navItems.icon"
           :to="navItems.link"
+          v-bind:ripple="{ class: 'secondary--text' }"
+          
+          >
+          <v-list-tile-action>
+            <v-icon style="color: #212121" id="nav-drawer-icon" v-html="navItems.icon"></v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title id="nav-drawer-title" v-text="navItems.title"></v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile
+          v-if="userIsAuthenticated"
+          @click="onLogout">
+          <v-list-tile-action>
+            <v-icon style="color: #212121" >exit_to_app</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>Logout</v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile
+          v-else
+          to="/signin">
+          <v-list-tile-action>
+            <v-icon style="color: #212121" >person</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content style="color: #212121" >Sign In</v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+
+    </v-navigation-drawer>
+
+        <v-navigation-drawer
+      app
+      primary
+      persistent
+      temporary
+      v-model="drawerMobile" 
+      hide-overlay
+      disable-route-watcher
+      enable-resize-watcher 
+    >
+      <v-list dense>
+       <v-list class="pa-0">
+        <router-link to="/" style="text-decoration: none"><v-list-tile avatar class="mt-2">
+          <v-list-tile-avatar>
+            <img src="/static/G-logo.svg" />
+          </v-list-tile-avatar>
+          <v-list-tile-content>
+            <v-list-tile-title style="font-weight: 600; font-size: 16px">Do Good, Easily.</v-list-tile-title>
+          </v-list-tile-content>
+          
+        </v-list-tile></router-link>
+      </v-list>  
+      <v-divider class="mt-1 mb-1"></v-divider>
+        <v-list-tile
+          v-for="navItems in navItems"
+          :key="navItems.icon"
+          :to="navItems.link"
+          v-bind:ripple="{ class: 'secondary--text' }"
+          
           >
           <v-list-tile-action>
             <v-icon style="color: #212121" id="nav-drawer-icon" v-html="navItems.icon"></v-icon>
@@ -58,6 +112,7 @@
     <v-toolbar 
     fixed 
     style='background-color: #ffffff'>
+    <v-btn icon @click.stop="drawerMobile = !drawerMobile"><v-icon>more_vert</v-icon></v-btn>
       <v-toolbar-title id='logo'><router-link to='/'
       style="font-family: 'Product Sans';
       color: #212121 !important; text-decoration: none">
@@ -121,6 +176,7 @@
         user: {},
         mini: true,
         drawer: true,
+        drawerMobile: false,
         right: null,
         navItems: [
           { icon: 'store', title: 'Featured Shops', link: '/shops' },
@@ -190,6 +246,5 @@
 </script>
 
 <style scoped lang="stylus">
-
 
 </style>

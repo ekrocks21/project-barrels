@@ -1,7 +1,7 @@
 <template>
-      <v-container fluid grid-list-md>
+      <v-container grid-list-md>
         <h3 class="mt-5 mb-4 primary--text" style="text-align: center">Meet the Team</h3>
-        <v-layout row wrap style="margin-left: 20%; margin-right:20%">
+        <v-layout class="mb-5" row wrap>
           <v-flex xs12 sm6
             v-for="items in items"
             :key="items.title"

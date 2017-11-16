@@ -51,6 +51,7 @@ new Vue({
         this.$store.dispatch('fetchUserData', user)
         this.$store.dispatch('fetchUserProfileData')
         this.$store.dispatch('fetchUserShopData')
+        this.$store.dispatch('fetchSetProduct')
       }
     })
     this.$store.dispatch('loadShops')

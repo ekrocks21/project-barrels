@@ -25,14 +25,18 @@
                   :src="shop.imageUrl"
                   height="200px">
                 </v-card-media>
-                <v-card-text>
-                <div style="font-size:20px; font-family: 'Product Sans'">{{ shop.shopName }}</div>
-                </v-card-text></router-link>
+                <v-card-actions class="pa-1">
+                <v-card-title style="font-size:16px; font-family: 'Product Sans'">{{ shop.shopName }}</v-card-title>
+                <v-spacer></v-spacer>
+                <v-btn v-tooltip:left="{ html: 'donations earned' }" style="cursor: pointer;" 
+                    target="blank" small flat light class="secondary--text "><v-icon left class="secondary--text">loyalty</v-icon>$300</v-btn>
+
+                </v-card-actions></router-link>
               </v-flex>
             </v-layout>
             <v-layout>
               <v-flex xs12>
-                <v-card-actions style="background-color: #ffffff">
+                <v-card-actions class="pa-3" style="background-color: #ffffff">
                    <follow-dialog
                 :shopId="shop.id"
                 v-if="userIsAuthenticated">

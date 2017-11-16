@@ -11,6 +11,7 @@ export const store = new Vuex.Store({
     user: null,
     userProfile: null,
     userShop: null,
+    setProduct: null,
     loading: false,
     error: null
   },
@@ -78,6 +79,9 @@ export const store = new Vuex.Store({
     },
     setUserShop (state, payload) {
       state.userShop = payload
+    },
+    setProduct (state, payload) {
+      state.setProduct = payload
     },
     setLoading (state, payload) {
       state.loading = payload
@@ -313,6 +317,11 @@ export const store = new Vuex.Store({
             id: key,
             productId: key
           })
+          firebase.database().ref('/products/').push(product).update({productImageUrl: productImageUrl})
+          commit('setProduct', {
+            ...product,
+            productImageUrl: productImageUrl
+          })
         })
         .catch((error) => {
           console.log(error)
@@ -481,6 +490,34 @@ export const store = new Vuex.Store({
           }
         )
     },
+    fetchSetProduct ({commit, getters}, payload) {
+      commit('setLoading', true)
+      firebase.database().ref('/products/').once('value')
+        .then((data) => {
+          const product = []
+          const obj = data.val()
+          for (let key in obj) {
+            product.push({
+              productName: obj[key].productName,
+              productDescription: obj[key].productDescription,
+              productPrice: obj[key].productPrice,
+              productUrl: obj[key].productUrl,
+              creatorId: obj[key].creatorId,
+              productCategory: obj[key].productCategory,
+              shopId: obj[key].shopId,
+              productImageUrl: obj[key].productImageUrl
+            })
+          }
+          commit('setLoading', false)
+          commit('setProduct', product)
+        })
+        .catch(
+          (error) => {
+            console.log(error)
+            commit('setLoading', false)
+          }
+        )
+    },
     logout ({commit}) {
       firebase.auth().signOut()
       commit('setUser', null)
@@ -521,6 +558,9 @@ export const store = new Vuex.Store({
     },
     userShop (state) {
       return state.userShop
+    },
+    setProduct (state) {
+      return state.setProduct
     },
     loading (state) {
       return state.loading

@@ -123,10 +123,13 @@
         productImage: null,
         productCategorySelect: { productCategory: 'Category' },
         productCategory: [
-          { productCategory: 'Women' },
-          { productCategory: 'Men' },
-          { productCategory: 'Kids' },
-          { productCategory: 'Pets' }
+          { productCategory: 'Home & Living' },
+          { productCategory: 'Health & Beauty' },
+          { productCategory: 'Arts & Crafts' },
+          { productCategory: 'Kids & Baby' },
+          { productCategory: 'Electronics' },
+          { productCategory: 'Sports & Outdoors' }
+
         ]
       }
     },

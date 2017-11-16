@@ -1,7 +1,7 @@
 <template>
   <v-app>
   <AboutHero></AboutHero>
-  <AboutTeam class="hidden-xs-only"></AboutTeam>
+  <AboutTeam></AboutTeam>
   </v-app>
 </template>
 

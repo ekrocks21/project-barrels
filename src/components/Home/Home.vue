@@ -12,7 +12,7 @@
   import HomeCarousel from './HomeCarousel.vue'
   import FeaturedGiver from './FeaturedGiver.vue'
   import HomeCategories from './HomeCategories.vue'
-  import HomeProducts from './home-products.vue'
+  import HomeProducts from './HomeProducts.vue'
   export default {
     components: {
       HomeCarousel: HomeCarousel,
