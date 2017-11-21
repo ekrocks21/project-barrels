@@ -29,19 +29,6 @@ export const store = new Vuex.Store({
       followedUsers.splice(followedUsers.findIndex(shop => shop.id === payload), 1)
       Reflect.deleteProperty(state.user.fbKeys, payload)
     },
-    favoriteProduct (state, payload) {
-      const id = payload.id
-      if (state.user.favoriteProducts.findIndex(products => products.id === id) >= 0) {
-        return
-      }
-      state.user.favoriteProducts.push(id)
-      state.user.fbKeys[id] = payload.fbKey
-    },
-    unFavoriteProduct (state, payload) {
-      const favoriteProducts = state.user.favoriteProducts
-      favoriteProducts.splice(favoriteProducts.findIndex(products => products.id === payload), 1)
-      Reflect.deleteProperty(state.user.fbKeys, payload)
-    },
     setLoadedShops (state, payload) {
       state.loadedShops = payload
     },
@@ -95,7 +82,7 @@ export const store = new Vuex.Store({
   },
   actions: {
     followUserForShop ({commit, getters}, payload) {
-      commit('setLoading', true)
+      commit('setLoading', false)
       const user = getters.user
       firebase.database().ref('/users/' + user.id).child('/following/')
         .push(payload)
@@ -109,7 +96,7 @@ export const store = new Vuex.Store({
         })
     },
     unfollowUserFromShop ({commit, getters}, payload) {
-      commit('setLoading', true)
+      commit('setLoading', false)
       const user = getters.user
       if (!user.fbKeys) {
         return
@@ -120,38 +107,6 @@ export const store = new Vuex.Store({
         .then(() => {
           commit('setLoading', false)
           commit('unfollowUserFromShop', payload)
-        })
-        .catch(error => {
-          console.log(error)
-          commit('setLoading', false)
-        })
-    },
-    favoriteProduct ({commit, getters}, payload) {
-      commit('setLoading', true)
-      const user = getters.user
-      firebase.database().ref('/users/' + user.id).child('/favorites/')
-        .push(payload)
-        .then(data => {
-          commit('setLoading', false)
-          commit('favoriteProduct', {id: payload, fbKey: data.key})
-        })
-        .catch(error => {
-          console.log(error)
-          commit('setLoading', false)
-        })
-    },
-    unFavoriteProduct ({commit, getters}, payload) {
-      commit('setLoading', true)
-      const user = getters.user
-      if (!user.fbKeys) {
-        return
-      }
-      const fbKey = user.fbKeys[payload]
-      firebase.database().ref('/users/' + user.id + '/favorites/').child(fbKey)
-        .remove()
-        .then(() => {
-          commit('setLoading', false)
-          commit('unFavoriteProduct', payload)
         })
         .catch(error => {
           console.log(error)
@@ -317,16 +272,49 @@ export const store = new Vuex.Store({
             id: key,
             productId: key
           })
+          let key
           firebase.database().ref('/products/').push(product).update({productImageUrl: productImageUrl})
           commit('setProduct', {
             ...product,
-            productImageUrl: productImageUrl
+            productImageUrl: productImageUrl,
+            id: key,
+            productId: key
           })
         })
         .catch((error) => {
           console.log(error)
         })
       // Reach out to firebase and store it
+    },
+    // Grab the products from the products tree in firebase
+    fetchSetProduct ({commit, getters}, payload) {
+      commit('setLoading', true)
+      firebase.database().ref('/products/').once('value')
+        .then((data) => {
+          const products = []
+          const obj = data.val()
+          for (let key in obj) {
+            products.push({
+              id: key,
+              productName: obj[key].productName,
+              productDescription: obj[key].productDescription,
+              productPrice: obj[key].productPrice,
+              productUrl: obj[key].productUrl,
+              creatorId: obj[key].creatorId,
+              productCategory: obj[key].productCategory,
+              shopId: obj[key].shopId,
+              productImageUrl: obj[key].productImageUrl
+            })
+          }
+          commit('setProduct', products)
+          commit('setLoading', false)
+        })
+        .catch(
+          (error) => {
+            console.log(error)
+            commit('setLoading', false)
+          }
+        )
     },
     signUserUp ({commit, getters}, payload) {
       commit('setLoading', true)
@@ -338,6 +326,7 @@ export const store = new Vuex.Store({
             const newUser = {
               id: user.uid,
               followedUsers: [],
+              favoriteProducts: [],
               fullName: payload.fullName,
               email: payload.email,
               profileName: payload.profileName,
@@ -366,10 +355,12 @@ export const store = new Vuex.Store({
             const newUser = {
               id: user.uid,
               followedUsers: [],
+              favoriteProducts: [],
               fullName: payload.fullName,
               email: payload.email,
               profileName: payload.profileName,
               fbKeys: {}
+
             }
             commit('setUser', newUser)
           }
@@ -386,6 +377,7 @@ export const store = new Vuex.Store({
       commit('setUser', {
         id: payload.uid,
         followedUsers: [],
+        favoriteProducts: [],
         fbKeys: {},
         fullName: payload.fullName,
         email: payload.email,
@@ -406,30 +398,6 @@ export const store = new Vuex.Store({
           const updatedUser = {
             id: getters.user.id,
             followedUsers: followedUsers,
-            fbKeys: swappedPairs
-          }
-          commit('setLoading', false)
-          commit('setUser', updatedUser)
-        })
-        .catch(error => {
-          console.log(error)
-          commit('setLoading', false)
-        })
-    },
-    fetchUserProductFavData ({commit, getters}) {
-      commit('setLoading', true)
-      firebase.database().ref('/users/' + getters.user.id + '/favorites/').once('value')
-        .then(data => {
-          const dataPairs = data.val()
-          let favoriteProducts = []
-          let swappedPairs = {}
-          for (let key in dataPairs) {
-            favoriteProducts.push(dataPairs[key])
-            swappedPairs[dataPairs[key]] = key
-          }
-          const updatedUser = {
-            id: getters.user.id,
-            favoriteProducts: favoriteProducts,
             fbKeys: swappedPairs
           }
           commit('setLoading', false)
@@ -490,34 +458,6 @@ export const store = new Vuex.Store({
           }
         )
     },
-    fetchSetProduct ({commit, getters}, payload) {
-      commit('setLoading', true)
-      firebase.database().ref('/products/').once('value')
-        .then((data) => {
-          const product = []
-          const obj = data.val()
-          for (let key in obj) {
-            product.push({
-              productName: obj[key].productName,
-              productDescription: obj[key].productDescription,
-              productPrice: obj[key].productPrice,
-              productUrl: obj[key].productUrl,
-              creatorId: obj[key].creatorId,
-              productCategory: obj[key].productCategory,
-              shopId: obj[key].shopId,
-              productImageUrl: obj[key].productImageUrl
-            })
-          }
-          commit('setLoading', false)
-          commit('setProduct', product)
-        })
-        .catch(
-          (error) => {
-            console.log(error)
-            commit('setLoading', false)
-          }
-        )
-    },
     logout ({commit}) {
       firebase.auth().signOut()
       commit('setUser', null)
@@ -561,6 +501,13 @@ export const store = new Vuex.Store({
     },
     setProduct (state) {
       return state.setProduct
+    },
+    setProducts (state) {
+      return productId => {
+        return state.setProduct.find((product) => {
+          return product.id === productId
+        })
+      }
     },
     loading (state) {
       return state.loading

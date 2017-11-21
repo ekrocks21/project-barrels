@@ -1,10 +1,31 @@
 <template>
 
-    <v-btn small flat class="accent--text" slot="activator" v-if="userIsFollowing" @click="onAgree">
-    <v-icon class="hidden-xs-only">person</v-icon><v-icon class="hidden-xs-only">check</v-icon>
+    <v-btn 
+      v-tooltip:right="{ html: 'unfollow shop' }" 
+      small 
+      flat 
+      class="accent--text" 
+      slot="activator" 
+      v-if="userIsFollowing" @click="onAgree">
+        <v-icon 
+        class="primary--text">
+        person
+        </v-icon>
+        <v-icon 
+        class="primary--text">
+        check
+        </v-icon>
     </v-btn>
-    <v-btn small class="secondary"  slot="activator" v-else @click="onAgree">
-    follow
+    
+    <v-btn 
+    flat
+    v-tooltip:right="{ html: 'follow shop' }"
+    small 
+    slot="activator" 
+    v-else @click="onAgree"
+    class="secondary--text">
+    <v-icon class="primary--text"> add</v-icon>
+    <v-icon class="primary--text">person</v-icon>
     </v-btn>
     
 </template>
@@ -12,11 +33,6 @@
 <script>
   export default {
     props: ['shopId'],
-    data () {
-      return {
-        followDialog: false
-      }
-    },
     computed: {
       shop () {
         return this.$store.getters.loadedShop(this.shopId)

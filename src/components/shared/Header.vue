@@ -12,34 +12,52 @@
     >
       <v-list dense>
        <v-list class="pa-0">
-        <v-list-tile avatar v-bind:ripple="{ class: 'secondary--text' }">
-         <router-link to='/' style="text-decoration: none"> <v-list-tile-avatar>
-            <img src="/static/G-logo.svg" />
-          </v-list-tile-avatar></router-link>
-        </v-list-tile>
-      </v-list>  
+          <v-list-tile 
+            avatar 
+            v-bind:ripple="{ class: 'secondary--text' }">
+            <router-link 
+              to='/' 
+              style="text-decoration: none"> 
+              <v-list-tile-avatar>
+                <img src="/static/G-logo.svg" />
+              </v-list-tile-avatar>
+            </router-link>
+          </v-list-tile>
+      </v-list> 
+
         <v-list-tile
           v-for="navItems in navItems"
           :key="navItems.icon"
           :to="navItems.link"
-          v-bind:ripple="{ class: 'secondary--text' }"
-          
-          >
-          <v-list-tile-action>
-            <v-icon style="color: #212121" id="nav-drawer-icon" v-html="navItems.icon"></v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title id="nav-drawer-title" v-text="navItems.title"></v-list-tile-title>
-          </v-list-tile-content>
+          v-bind:ripple="{ class: 'secondary--text' }">
+            <v-list-tile-action>
+              <v-icon 
+                style="color: #212121" 
+                id="nav-drawer-icon" 
+                v-html="navItems.icon">
+              </v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title 
+                id="nav-drawer-title" 
+                v-text="navItems.title">
+              </v-list-tile-title>
+            </v-list-tile-content>
         </v-list-tile>
+
         <v-list-tile
           v-if="userIsAuthenticated"
           @click="onLogout">
-          <v-list-tile-action>
-            <v-icon style="color: #212121" >exit_to_app</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>Logout</v-list-tile-content>
+            <v-list-tile-action>
+              <v-icon style="color: #212121">
+                exit_to_app
+              </v-icon>
+            </v-list-tile-action>
+          <v-list-tile-content>
+            Logout
+          </v-list-tile-content>
         </v-list-tile>
+
         <v-list-tile
           v-else
           to="/signin">
@@ -52,7 +70,7 @@
 
     </v-navigation-drawer>
 
-        <v-navigation-drawer
+    <v-navigation-drawer
       app
       primary
       persistent
@@ -60,20 +78,30 @@
       v-model="drawerMobile" 
       hide-overlay
       disable-route-watcher
-      enable-resize-watcher 
-    >
+      enable-resize-watcher>
       <v-list dense>
        <v-list class="pa-0">
-        <router-link to="/" style="text-decoration: none"><v-list-tile avatar class="mt-2">
-          <v-list-tile-avatar>
-            <img src="/static/G-logo.svg" />
-          </v-list-tile-avatar>
-          <v-list-tile-content>
-            <v-list-tile-title style="font-weight: 600; font-size: 16px">Do Good, Easily.</v-list-tile-title>
-          </v-list-tile-content>
-          
-        </v-list-tile></router-link>
-      </v-list>  
+        <router-link 
+          to="/" 
+          style="text-decoration: none">
+          <v-list-tile 
+            avatar 
+            class="mt-2">
+            <v-list-tile-avatar>
+              <img src="/static/G-logo.svg" />
+            </v-list-tile-avatar>
+            <v-list-tile-content>
+              <v-list-tile-title 
+                style="font-weight: 600; 
+                font-size: 16px; 
+                font-family:'Product Sans'">
+                Do Good, Easily.
+              </v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </router-link>
+      </v-list> 
+       
       <v-divider class="mt-1 mb-1"></v-divider>
         <v-list-tile
           v-for="navItems in navItems"
@@ -167,6 +195,7 @@
 <script>
   import firebase from 'firebase'
   export default {
+    props: ['userId'],
     data () {
       return {
         photo: '',
@@ -179,6 +208,7 @@
         drawerMobile: false,
         right: null,
         navItems: [
+          { icon: 'whatshot', title: 'Featured Products', link: '/products' },
           { icon: 'store', title: 'Featured Shops', link: '/shops' },
           { icon: 'explore', title: 'Categories', link: '/categories' },
           { icon: 'hotel', title: 'Home & Living', link: '/household' },

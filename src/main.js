@@ -49,13 +49,14 @@ new Vue({
       if (user) {
         this.$store.dispatch('autoSignIn', user)
         this.$store.dispatch('fetchUserData', user)
-        this.$store.dispatch('fetchUserProfileData')
-        this.$store.dispatch('fetchUserShopData')
-        this.$store.dispatch('fetchSetProduct')
+       // this.$store.dispatch('fetchUserProductFavData', user)
+        this.$store.dispatch('fetchUserProfileData', user)
+        this.$store.dispatch('fetchUserShopData', user)
       }
     })
     this.$store.dispatch('loadShops')
     this.$store.dispatch('loadProducts')
+    this.$store.dispatch('fetchSetProduct')
   }
 })
 

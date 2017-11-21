@@ -13,7 +13,7 @@
         </v-card-title>
         <v-card-actions>
         <v-btn
-          v-if="userHasShop !== false"
+          v-if="userHasShop"
           fab
           slot="activator"
           small
@@ -27,7 +27,7 @@
           slot="activator"
           small
           style="color: #212121"
-          v-bind:href="'/shops/'">
+          v-bind:href="'/createshop/'">
           <v-icon>store</v-icon>
         </v-btn> 
         <v-spacer></v-spacer>
@@ -41,6 +41,7 @@
 
 <script>
   export default {
+    props: ['id'],
     computed: {
       userInfo () {
         return this.$store.getters.user
@@ -53,12 +54,11 @@
       },
       userHasShop () {
         if (this.$store.getters.userShop !== null && this.$store.getters.userShop !== undefined) {
-          console.log(this.$store)
           return this.$store.getters.userShop[0].shopId
         }
       },
       shops () {
-        return this.$store.getters.loadedShops
+        return this.$store.getters.loadedShops[0].shopId
       }
     },
     methods: {

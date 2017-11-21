@@ -55,7 +55,7 @@
                 </v-layout>
                 <v-layout row>
                   <v-flex xs12>
-                    <v-btn class="secondary" type="submit" :disabled="loading" :loading="loading">
+                    <v-btn block class="secondary" type="submit" :disabled="loading" :loading="loading">
                       Sign up
                        <span slot="loader" class="custom-loader">
                         <v-icon light>cached</v-icon>
@@ -65,7 +65,7 @@
                 </v-layout>
               </form>
               <v-card-text>
-              <p class="text-xs-center primary--text mt-3 mb-0"> By signing up, you agree to GOOD Influence's Terms of Service and Privacy Policy.</p>
+              <p class="text-xs-center primary--text mt-3 mb-0"> By signing up, you agree to GOOD Influence's <router-link to="/terms">Terms of Service</router-link>.</p>
               </v-card-text>
             </v-container>
           </v-card-text>
@@ -78,24 +78,36 @@
               absolute
               dark
               fab
+              
               top
               right
-              class="info"
+              style="background-color: #ffffff"
               slot="activator"
             >
-              <v-icon>info_outline</v-icon>
+              <v-icon class="primary--text">info_outline</v-icon>
             </v-btn>
             <v-card>
-        <v-card-title>
-          <div class="headline">Have a favorite cause?</div>
-        </v-card-title>
-        <v-card-text>Create an account, promote items you enjoy, and raise money for your favorite cause.</v-card-text>
-         <v-card-text>It's that simple!</v-card-text> 
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn class="info--text darken-1" flat="flat" @click.native="dialog = false"><v-icon left class="info--text">favorite_outline</v-icon>Get Started</v-btn>
-        </v-card-actions>
-      </v-card>
+              <v-divider></v-divider>
+                <v-card-text 
+                class="primary--text mt-3">
+                Each purchase via 
+                  <span 
+                    style="font-family:'Product Sans'; 
+                    color: #212121; 
+                    font-weight:600; 
+                    font-size: 16px">
+                    GOOD Influence
+                  </span> 
+                earns a donation.
+                </v-card-text>
+                  <v-card-text class="primary--text">It's simple - you shop, we earn a commission from Amazon, and then we donate it, <span style="font-weight:600; color: #212121; font-size: 16px; font-family:'Product Sans'">100%.</span>
+                    </v-card-text>
+                <v-card-actions>
+
+                  <v-spacer></v-spacer>
+                  <v-btn class="secondary--text" flat="flat" @click.native="dialog = false">Do Good, Easily</v-btn>
+                </v-card-actions>
+              </v-card>
            </v-dialog> 
           </v-card-text>
   </v-container>

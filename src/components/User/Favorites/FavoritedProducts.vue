@@ -1,7 +1,11 @@
 <template>
 
-    <v-btn icon  slot="activator" v-if="productIsFavorite" @click="onFavorite">
-    <v-icon class="love--text">favorite</v-icon>
+    <v-btn icon 
+    slot="activator" 
+    v-if="productIsFavorite" 
+    @click="onFavorite">
+    <v-icon 
+    class="love--text">favorite</v-icon>
     </v-btn>
     <v-btn icon slot="activator" v-else @click="onFavorite">
     <v-icon class="primary--text"> favorite_outline</v-icon>
@@ -12,28 +16,22 @@
 <script>
   export default {
     props: ['productId'],
-    data () {
-      return {
-        favoriteDialog: false,
-        products: this.$store.getters.loadedShop(this.shopId).products
-      }
-    },
     computed: {
-      shop () {
-        return this.$store.getters.loadedShop(this.shopId)
+      product () {
+        return this.$store.getters.setProducts(this.productId)
       },
       productIsFavorite () {
-        return this.$store.getters.user.favoritedProducts.findIndex(products => {
-          return products.id === this.$store.getters.productId
+        return this.$store.getters.user.favoriteProducts.findIndex(productId => {
+          return productId === this.productId
         }) >= 0
       }
     },
     methods: {
       onFavorite () {
         if (this.productIsFavorite) {
-          this.$store.dispatch('favoriteProduct', this.productId)
-        } else {
           this.$store.dispatch('unFavoriteProduct', this.productId)
+        } else {
+          this.$store.dispatch('favoriteProduct', this.productId)
         }
       }
     }

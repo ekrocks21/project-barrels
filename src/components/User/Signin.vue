@@ -43,18 +43,20 @@
                 </v-layout>
                 <v-layout row>
                   <v-flex xs12>
-                    <v-btn class="secondary" type="submit" :disabled="loading" :loading="loading">
+                    <v-btn block class="secondary mb-3 mt-3" type="submit" :disabled="loading" :loading="loading">
                       Sign in
                        <span slot="loader" class="custom-loader">
                         <v-icon light>cached</v-icon>
                        </span>
                     </v-btn>
-
+                    <v-card-actions class="pa-0 ma-0">
+                      <v-spacer></v-spacer>
                     <v-dialog v-model="pwReset">
-                    <v-btn icon class="primary--text" slot="activator"
+                    <v-btn icon class="primary--text pa-0 ma-0" slot="activator"
                     v-tooltip:right="{ html: 'Forgot password?' }">
                       <v-icon>help_outline</v-icon>
                     </v-btn>
+                    
                     <v-card>
                       <v-card-title>
                         <span class="headline">Reset Password</span>
@@ -76,7 +78,7 @@
                         </v-card-actions>  
                     </v-card>
                     </v-dialog>
-
+                    </v-card-actions>
                   </v-flex>
                 </v-layout>
               </form>
