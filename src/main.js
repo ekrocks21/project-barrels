@@ -4,23 +4,16 @@ import App from './App'
 import * as firebase from 'firebase'
 import router from './router'
 import { store } from './store'
-import AlertCmp from './components/shared/Alert.vue'
-import EditShop from './components/Shop/Edit/EditShop.vue'
-import CreateProduct from './components/Shop/CreateProduct.vue'
-import ShopProducts from './components/Shop/ShopProducts.vue'
-import FollowDialog from './components/Shop/FollowedUsers/FollowDialog.vue'
-import FavoritedProduct from './components/User/Favorites/FavoritedProducts.vue'
+import UpdateGiver from './components/Givers/Update/updateGiver.vue'
+import CreateProduct from './components/Givers/CreateProduct.vue'
+import GiverProducts from './components/Givers/GiverProducts.vue'
 import axios from 'axios'
 
 Vue.use(Vuetify)
 Vue.config.productionTip = false
-Vue.component('app-alert', AlertCmp)
-Vue.component('edit-shop', EditShop)
+Vue.component('update-giver', UpdateGiver)
 Vue.component('create-product', CreateProduct)
-Vue.component('shop-products', ShopProducts)
-Vue.component('follow-dialog', FollowDialog)
-Vue.component('favorite-product', FavoritedProduct)
-
+Vue.component('giver-products', GiverProducts)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
@@ -32,7 +25,6 @@ new Vue({
     var url = 'https://spreadsheets.google.com/feeds/list/1LYypJ_Uk5paynPnN_cl9pvXD_ePIcVD4t88VJTazfrM/1/public/values?alt=json'
     axios.get(url)
     .then(response => {
-      console.log(response)
     })
     .catch(e => {
       this.errors.push(e)
@@ -48,13 +40,11 @@ new Vue({
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.$store.dispatch('autoSignIn', user)
-        this.$store.dispatch('fetchUserData', user)
        // this.$store.dispatch('fetchUserProductFavData', user)
         this.$store.dispatch('fetchUserProfileData', user)
-        this.$store.dispatch('fetchUserShopData', user)
       }
     })
-    this.$store.dispatch('loadShops')
+    this.$store.dispatch('loadGivers')
     this.$store.dispatch('loadProducts')
     this.$store.dispatch('fetchSetProduct')
   }

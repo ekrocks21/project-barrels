@@ -51,7 +51,7 @@
                     </v-btn>
                     <v-card-actions class="pa-0 ma-0">
                       <v-spacer></v-spacer>
-                    <v-dialog v-model="pwReset">
+                    <!--  <v-dialog>
                     <v-btn icon class="primary--text pa-0 ma-0" slot="activator"
                     v-tooltip:right="{ html: 'Forgot password?' }">
                       <v-icon>help_outline</v-icon>
@@ -66,7 +66,7 @@
                         <v-container>
                           <v-layout wrap>
                             <v-flex xs12>
-                              <v-text-field label="Email" id="emailPasswordReset" v-model="emailPasswordReset"></v-text-field>
+                              <v-text-field label="Email" id="emailPasswordReset"></v-text-field>
                             </v-flex>
                            </v-layout>
                           </v-container>
@@ -77,7 +77,7 @@
                           <v-btn class="secondary--text" flat @click="resetPw">Reset</v-btn>
                         </v-card-actions>  
                     </v-card>
-                    </v-dialog>
+                    </v-dialog> -->
                     </v-card-actions>
                   </v-flex>
                 </v-layout>
@@ -97,8 +97,8 @@
       return {
         e1: true,
         email: '',
-        password: '',
-        pwReset: false
+        password: ''
+        // pwReset: false
       }
     },
     computed: {

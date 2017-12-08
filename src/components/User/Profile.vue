@@ -1,38 +1,48 @@
 <template>
  <v-container>
-  <v-layout>
+   <v-layout row wrap v-if="loading">
+      <v-flex xs12 class="text-xs-center">
+        <v-progress-circular
+          indeterminate
+          class="secondary--text mt-5"
+          :width="5"
+          :size="70"></v-progress-circular>
+      </v-flex>
+    </v-layout>
+  <v-layout row wrap v-else>
     <v-flex xs12 sm12 mt-5>
-      <v-card class="mb-5" flat>
-        <v-card-media src="/static/about.png" height="200px">
-        </v-card-media>
-        <v-card-title primary-title>
-          <div>
-          <h5 class="secondary--text mb-0">{{ userProfile.fullName }}</h5>
-          <p class="primary--text mb-0">{{ userProfile.email }}</p>
-          </div>
-        </v-card-title>
-        <v-card-actions>
-        <v-btn
-          v-if="userHasShop"
-          fab
-          slot="activator"
-          small
-          style="color: #212121"
-          v-bind:href="'/shops/' + userHasShop">
-          <v-icon>store</v-icon>
-        </v-btn> 
-          <v-btn
-          v-else
-          fab
-          slot="activator"
-          small
-          style="color: #212121"
-          v-bind:href="'/createshop/'">
-          <v-icon>store</v-icon>
-        </v-btn> 
-        <v-spacer></v-spacer>
-          <v-btn class="info--text" flat="flat" @click="onLogout">Logout</v-btn>
+      <v-card class="mb-5" >
+
+        <!-- Cover Image & Profile Image -->
+
+        <v-card-media id="coverImage" :src="userProfile.coverImage" height="200px">
+         <v-card-actions>
+           <v-btn class="ml-3"  fab small dark v-tooltip:right="{ html: 'add a cover image' }"><v-icon>photo_camera</v-icon></v-btn></v-btn>
+           <v-spacer></v-spacer>
+                <template>
+                  <v-spacer></v-spacer>
+                    <edit-profile :userProfile="userProfile"></edit-profile>
+                </template>
         </v-card-actions>
+        <div id="avatar">
+          <img :src="userProfile.profileImage" height="100"/>
+        </div>
+        </v-card-media>
+      
+      <!-- Profile Name & Logout -->
+
+        <v-card-actions primary-title class="pl-4 pt-3 pb-0 mb-0">
+          <div>
+          <h5 class="mb-2" id="userName">@{{ userProfile.userName }}
+            <v-btn small icon flat fab class="mb-2" v-tooltip:right="{ html: 'verified giver' }">
+              <v-icon class="secondary--text">verified_user</v-icon>
+              </v-btn>
+            </h5>
+          </div>
+          <v-spacer></v-spacer>
+          <v-btn class="light--text mb-2 mr-2" flat="flat" @click="onLogout">Logout</v-btn>
+        </v-card-actions>
+
       </v-card>
     </v-flex>
   </v-layout>
@@ -46,19 +56,11 @@
       userInfo () {
         return this.$store.getters.user
       },
-      userIsFollowing () {
-        return this.$store.getters.user.followedUsers
-      },
       userProfile () {
         return this.$store.getters.userProfile[0]
       },
-      userHasShop () {
-        if (this.$store.getters.userShop !== null && this.$store.getters.userShop !== undefined) {
-          return this.$store.getters.userShop[0].shopId
-        }
-      },
-      shops () {
-        return this.$store.getters.loadedShops[0].shopId
+      loading () {
+        return this.$store.getters.loading
       }
     },
     methods: {
@@ -69,4 +71,30 @@
     }
   }
 </script>
+
+<style scoped>
+#avatar {
+    text-align: center;
+    background-size: cover;
+    margin: 0 auto;
+    background-position: top center;
+
+    /* round the edges to a circle with border radius 1/2 container size */
+    border-radius: 50%;
+}
+
+#coverImage {
+  background-color: #212121;
+}
+
+
+#userName {
+  color: #212121;
+  font-size: 26px;
+  font-family: 'Product Sans';
+  text-transform: lowercase;
+}
+
+
+</style>
 

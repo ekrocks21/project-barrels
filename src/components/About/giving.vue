@@ -11,7 +11,7 @@
             color: #212121; 
             margin-top:10%; 
             font-family: 'Product Sans'"
-            >Do Good, Easily.
+            >$3,000.
             </h1>
 
             <h4 style="
@@ -22,18 +22,27 @@
             line-height: 28px;
             margin: 0 auto;"
             class="mt-5">
-             We make it super easy for you to be a good person.
-             </h4>      
+            Good Influence is making real impact -- learn how.
+                         </h4>      
         </v-card-media>
         <v-card-actions style="background-color: #fafafa">
-              <v-btn onClick="document.getElementById('howtodogood').scrollIntoView();" class="secondary--text" style="margin: 0 auto" v-tooltip:bottom="{ html: 'how we give back' }" fab><v-icon>keyboard_arrow_down</v-icon></v-btn>  
+              <v-btn class="secondary--text" style="margin: 0 auto" v-tooltip:bottom="{ html: 'how we make impact' }" fab><v-icon>keyboard_arrow_down</v-icon></v-btn>  
         </v-card-actions>
         
       </v-card>
     </v-flex>
   </v-layout>
 
+
+  
   </v-container> 
+      <v-layout class="mt-5">
+    <v-flex class="mt-5">
+      <v-card class="mt-5" flat height="400" style="z-index: 1000">
+        <v-card-media class="secondary" height="400px" width="100%"></v-card-media> 
+      </v-card>
+    </v-flex>
+  </v-layout>
   </v-app>
 </template>
 <script>

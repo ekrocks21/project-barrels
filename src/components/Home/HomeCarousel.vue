@@ -24,12 +24,6 @@
         carousel: [
           {
             src: '/static/dogood.svg', id: 'about'
-          },
-          {
-            src: './static/featuredinfluencer.jpg', id: 'about'
-          },
-          {
-            src: './static/homeimage.png', id: 'about'
           }
         ]
       }

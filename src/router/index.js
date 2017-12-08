@@ -3,7 +3,8 @@ import Router from 'vue-router'
 import Home from '@/components/Home/Home'
 import Signup from '@/components/User/Signup'
 import Signin from '@/components/User/Signin'
-import About from '@/components/Footer/About'
+import About from '@/components/About/About'
+import Giving from '@/components/About/giving'
 import Categories from '@/components/Categories/Categories'
 import Household from '@/components/Categories/Household'
 import Health from '@/components/Categories/Health'
@@ -11,12 +12,13 @@ import Arts from '@/components/Categories/Arts'
 import Kids from '@/components/Categories/Kids'
 import Electronics from '@/components/Categories/Electronics'
 import Outdoors from '@/components/Categories/Outdoors'
-import FeaturedShops from '@/components/Featured/FeaturedShops'
+import Giver from '@/components/Givers/Giver'
 import CreateShop from '@/components/Shop/CreateShop'
+import Policies from '@/components/shared/terms'
 import AuthGuard from './auth-guard'
 import Profile from '@/components/User/Profile'
 import Shop from '@/components/Shop/Shop'
-import Shops from '@/components/Shop/Shops'
+import FeaturedGivers from '@/components/Givers/FeaturedGivers'
 
 Vue.use(Router)
 
@@ -48,6 +50,16 @@ export default new Router({
       path: '/about',
       name: 'About',
       component: About
+    },
+    {
+      path: '/policies',
+      name: 'Policies',
+      component: Policies
+    },
+    {
+      path: '/giving',
+      name: 'Giving',
+      component: Giving
     },
     {
       path: '/categories',
@@ -85,9 +97,10 @@ export default new Router({
       component: Outdoors
     },
     {
-      path: '/featuredshops',
-      name: 'FeaturedShops',
-      component: FeaturedShops
+      path: '/giver/:id',
+      name: 'Giver',
+      props: true,
+      component: Giver
     },
     {
       path: '/createshop',
@@ -96,9 +109,9 @@ export default new Router({
       beforeEnter: AuthGuard
     },
     {
-      path: '/shops',
-      name: 'Shops',
-      component: Shops
+      path: '/featuredgivers',
+      name: 'featuredgivers',
+      component: FeaturedGivers
     },
     {
       path: '/shops/:id',

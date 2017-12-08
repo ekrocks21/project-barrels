@@ -1,17 +1,42 @@
 <template>
-<v-dialog v-model="addProductDialog" fullscreen transition="dialog-bottom-transition" :overlay=false>
-  <v-btn v-tooltip:bottom="{ html: 'start giving' }" fab small class="secondary" slot="activator" >
-    <v-icon style="color:#ffffff">add</v-icon>
+<!-- Create product Dialog in Header -->
+<v-dialog 
+ v-model="createProductDialog" 
+ fullscreen 
+ transition="dialog-bottom-transition" 
+ :overlay=false>
+  <v-btn 
+   v-tooltip:bottom="{ html: 'start giving' }" 
+   fab 
+   small 
+   class="secondary" 
+   slot="activator">
+    <v-icon 
+     style="color:#ffffff">
+     add
+    </v-icon>
   </v-btn>
-  <v-card class="secondary">
-    <v-toolbar flat class="secondary">
 
-      <v-toolbar-title style="color: #ffffff; font-family:'Product Sans'">GOOD Influence</v-toolbar-title>
+<!-- Card that appears after clicking create product dialog -->
+  <v-card class="secondary">
+<!-- toolbar within the create product dialog card -->    
+    <v-toolbar 
+     flat 
+     class="secondary">
+      <v-toolbar-title id ="create-product-dialog-toolbar-title">
+        GOOD Influence
+      </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn flat @click.native="addProductDialog = false" dark>
+<!-- close the create product dialog -->      
+      <v-btn 
+       flat 
+       @click.native="createProductDialog = false" 
+       dark>
         close
       </v-btn>
     </v-toolbar>
+
+<!-- beneath the toolbar in create product dialog -->    
   <v-container>
      <v-layout row class="mt-5">
       <v-flex xs12 sm8 offset-sm2>
@@ -51,7 +76,7 @@
               <v-btn
               block
                 class="secondary mb-5"
-                @click.native="addProductDialog = false"
+                @click.native="createProductDialog = false"
                 type="submit">Create Product</v-btn>
             </v-flex>
           </v-layout>
@@ -71,12 +96,12 @@
     props: ['giver'],
     data () {
       return {
-        addProductDialog: false,
+        createProductDialog: false,
         productName: '',
         productDescription: 'Doing Good, Easily',
         productPrice: '$200',
         productUrl: '',
-        productImage: 'https://firebasestorage.googleapis.com/v0/b/barrels-646b4.appspot.com/o/users%2Fdefaultcoverimage.svg?alt=media&token=667bd3da-f429-40bb-b60e-016e1fd11dd1',
+        productImage: 'https://firebasestorage.googleapis.com/v0/b/barrels-646b4.appspot.com/o/users%2Fdefaultcoverimage.svg?alt=media&token=667bd3da-f429-40bb-b60e-016e1fd11dd1'
       }
     },
     computed: {
@@ -120,3 +145,14 @@
     }
   }
 </script>
+
+<style scoped>
+
+#create-product-dialog-toolbar-title {
+  color: #ffffff; 
+  font-family:'Product Sans';
+
+}
+
+
+</style>

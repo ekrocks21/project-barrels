@@ -1,31 +1,29 @@
 <template>
   <v-app>
-  <HomeCarousel></HomeCarousel>
-    <HomeCategories></HomeCategories>
-  <FeaturedGiver></FeaturedGiver>
-  <HomeProducts></HomeProducts>
-    
+    <HomeCarousel></HomeCarousel>
+    <FeaturedGivers></FeaturedGivers>
+    <HomeProducts></HomeProducts>
   </v-app>
 </template>
 
 <script>
   import HomeCarousel from './HomeCarousel.vue'
-  import FeaturedGiver from './FeaturedGiver.vue'
-  import HomeCategories from './HomeCategories.vue'
+  import FeaturedGivers from '@/components/Givers/FeaturedGivers.vue'
   import HomeProducts from './HomeProducts.vue'
   export default {
     components: {
       HomeCarousel: HomeCarousel,
-      HomeCategories: HomeCategories,
-      FeaturedGiver: FeaturedGiver,
+      FeaturedGivers: FeaturedGivers,
       HomeProducts: HomeProducts
     },
     computed: {
-      userProfile () {
-        return this.$store.getters.userProfile[0]
+      givers () {
+        return this.$store.getters.loadedGivers
       },
-      shops () {
-        return this.$store.getters.loadedShops
+      userProfile () {
+        if (this.$store.getters.user !== null && this.$store.getters.user !== undefined) {
+          return this.$store.getters.user.id
+        }
       }
     }
   }

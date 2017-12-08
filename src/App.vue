@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app id="app">
     <appHeader></appHeader>
     <main>
       <transition>
@@ -21,6 +21,9 @@
     computed: {
       userIsAuthenticated () {
         return this.$store.getters.user !== null && this.$store.getters.user !== undefined
+      },
+      user () {
+        return this.$store.getters.user.id
       }
     },
     methods: {

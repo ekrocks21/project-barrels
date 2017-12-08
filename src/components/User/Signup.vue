@@ -19,10 +19,10 @@
                 <v-layout row>
                   <v-flex xs12>
                     <v-text-field
-                    name="fullName"
-                    label="Full Name"
-                    id="fullName"
-                    v-model="fullName"
+                    name="userName"
+                    label="User Name"
+                    id="userName"
+                    v-model="userName"
                     required
             ></v-text-field>
           </v-flex>
@@ -50,7 +50,8 @@
                       :type="e1 ? 'password' : 'text'"
                       counter
                       required
-                      v-tooltip:right="{ html: '6-digits please!' }" primary></v-text-field>
+                      v-tooltip:right="{ html: '6-digits please!' }" primary>
+                    </v-text-field>
                   </v-flex>
                 </v-layout>
                 <v-layout row>
@@ -65,7 +66,7 @@
                 </v-layout>
               </form>
               <v-card-text>
-              <p class="text-xs-center primary--text mt-3 mb-0"> By signing up, you agree to GOOD Influence's <router-link to="/terms">Terms of Service</router-link>.</p>
+              <p class="text-xs-center primary--text mt-3 mb-0"> By signing up, you agree to GOOD Influence's <router-link to="/policies">Terms of Use</router-link>.</p>
               </v-card-text>
             </v-container>
           </v-card-text>
@@ -78,7 +79,6 @@
               absolute
               dark
               fab
-              
               top
               right
               style="background-color: #ffffff"
@@ -87,6 +87,7 @@
               <v-icon class="primary--text">info_outline</v-icon>
             </v-btn>
             <v-card>
+              
               <v-divider></v-divider>
                 <v-card-text 
                 class="primary--text mt-3">
@@ -118,12 +119,16 @@
     data () {
       return {
         e1: true,
-        fullName: '',
-        email: '',
         password: '',
-        confirmPassword: '',
-        dialog: false,
-        test: true
+        custom: true,
+        userName: '',
+        email: '',
+        userWebsite: '',
+        userFullName: '',
+        userBio: 'Doing Good, Easily.',
+        profileImage: 'https://firebasestorage.googleapis.com/v0/b/barrels-646b4.appspot.com/o/users%2Fdefaultprofileimage.svg?alt=media&token=62633b11-26f9-4f70-b016-b3619a6915c1',
+        coverImage: 'https://firebasestorage.googleapis.com/v0/b/barrels-646b4.appspot.com/o/users%2Fdefaultcoverimage.svg?alt=media&token=667bd3da-f429-40bb-b60e-016e1fd11dd1',
+        dialog: false
       }
     },
     computed: {
@@ -146,7 +151,7 @@
     },
     methods: {
       onSignup () {
-        this.$store.dispatch('signUserUp', {email: this.email, password: this.password, fullName: this.fullName, profileName: this.fullName})
+        this.$store.dispatch('signUserUp', {email: this.email, password: this.password, userName: this.userName, profileImage: this.profileImage, coverImage: this.coverImage, userWebsite: this.userWebsite, userBio: this.userBio, userFullName: this.userFullName})
       },
       onDismissed () {
         this.$store.dispatch('clearError')
@@ -154,3 +159,23 @@
     }
   }
 </script>
+
+<style scoped>
+
+#userName {
+  color: #212121;
+  font-size: 26px;
+  font-family: 'Product Sans';
+  text-transform: lowercase;
+}
+
+#email {
+  color: #212121;
+  font-size: 26px;
+  font-family: 'Product Sans';
+  text-transform: lowercase;
+}
+
+
+
+</style>

@@ -6,57 +6,31 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {
-    loadedShops: null,
-    loadedProducts: null,
     user: null,
-    userProfile: null,
-    userShop: null,
+    loadedGivers: null,
+    loadedProducts: null,
     setProduct: null,
+    userProfile: null,
     loading: false,
     error: null
   },
   mutations: {
-    followUserForShop (state, payload) {
-      const id = payload.id
-      if (state.user.followedUsers.findIndex(shop => shop.id === id) >= 0) {
-        return
-      }
-      state.user.followedUsers.push(id)
-      state.user.fbKeys[id] = payload.fbKey
-    },
-    unfollowUserFromShop (state, payload) {
-      const followedUsers = state.user.followedUsers
-      followedUsers.splice(followedUsers.findIndex(shop => shop.id === payload), 1)
-      Reflect.deleteProperty(state.user.fbKeys, payload)
-    },
-    setLoadedShops (state, payload) {
-      state.loadedShops = payload
-    },
-    createShop (state, payload) {
-      state.loadedShops.push(payload)
-    },
-    updateShop (state, payload) {
-      const shop = state.loadedShops.find(shop => {
-        return shop.id === payload.id
+    updateGiver (state, payload) {
+      const giver = state.loadedGivers.find(giver => {
+        return giver.id === payload.id
       })
-      if (payload.shopName) {
-        shop.shopName = payload.shopName
+      if (payload.userFullName) {
+        giver.userFullName = payload.userFullName
       }
-      if (payload.tagLine) {
-        shop.tagLine = payload.tagLine
+      if (payload.userName) {
+        giver.userName = payload.userName
       }
-      if (payload.description) {
-        shop.description = payload.description
+      if (payload.userWebsite) {
+        giver.userWebsite = payload.userWebsite
       }
-      if (payload.location) {
-        shop.location = payload.location
+      if (payload.userBio) {
+        giver.userBio = payload.userBio
       }
-    },
-    setLoadedProducts (state, payload) {
-      state.loadedProducts = payload
-    },
-    createProduct (state, payload) {
-      state.loadedProducts.push(payload)
     },
     setUser (state, payload) {
       state.user = payload
@@ -64,8 +38,14 @@ export const store = new Vuex.Store({
     setUserProfile (state, payload) {
       state.userProfile = payload
     },
-    setUserShop (state, payload) {
-      state.userShop = payload
+    setLoadedGivers (state, payload) {
+      state.loadedGivers = payload
+    },
+    createProduct (state, payload) {
+      state.loadedProducts.push(payload)
+    },
+    setLoadedProducts (state, payload) {
+      state.loadedProducts = payload
     },
     setProduct (state, payload) {
       state.setProduct = payload
@@ -81,241 +61,6 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
-    followUserForShop ({commit, getters}, payload) {
-      commit('setLoading', false)
-      const user = getters.user
-      firebase.database().ref('/users/' + user.id).child('/following/')
-        .push(payload)
-        .then(data => {
-          commit('setLoading', false)
-          commit('followUserForShop', {id: payload, fbKey: data.key})
-        })
-        .catch(error => {
-          console.log(error)
-          commit('setLoading', false)
-        })
-    },
-    unfollowUserFromShop ({commit, getters}, payload) {
-      commit('setLoading', false)
-      const user = getters.user
-      if (!user.fbKeys) {
-        return
-      }
-      const fbKey = user.fbKeys[payload]
-      firebase.database().ref('/users/' + user.id + '/following/').child(fbKey)
-        .remove()
-        .then(() => {
-          commit('setLoading', false)
-          commit('unfollowUserFromShop', payload)
-        })
-        .catch(error => {
-          console.log(error)
-          commit('setLoading', false)
-        })
-    },
-    loadShops ({commit}) {
-      commit('setLoading', true)
-      firebase.database().ref('shops').once('value')
-        .then((data) => {
-          const shops = []
-          const obj = data.val()
-          for (let key in obj) {
-            shops.push({
-              id: key,
-              shopName: obj[key].shopName,
-              tagLine: obj[key].tagLine,
-              description: obj[key].description,
-              imageUrl: obj[key].imageUrl,
-              location: obj[key].location,
-              creatorId: obj[key].creatorId,
-              products: obj[key].products
-            })
-          }
-          commit('setLoadedShops', shops)
-          commit('setLoading', false)
-        })
-        .catch(
-          (error) => {
-            console.log(error)
-            commit('setLoading', false)
-          }
-        )
-    },
-    createShop ({commit, getters}, payload) {
-      const shop = {
-        shopName: payload.shopName,
-        tagLine: payload.tagLine,
-        description: payload.description,
-        location: payload.location,
-        creatorId: getters.user.id,
-        products: []
-      }
-      let imageUrl
-      let key
-      firebase.database().ref('shops').push(shop)
-        .then((data) => {
-          key = data.key
-          return key
-        })
-        .then(key => {
-          const filename = payload.image.name
-          const ext = filename.slice(filename.lastIndexOf('.'))
-          return firebase.storage().ref('shops/').child(key + '/shop-image/' + key + '.' + ext).put(payload.image)
-        })
-        .then(fileData => {
-          imageUrl = fileData.metadata.downloadURLs[0]
-          return firebase.database().ref('shops').child(key).update({imageUrl: imageUrl})
-        })
-        .then((data) => {
-          commit('createShop', {
-            ...shop,
-            imageUrl: imageUrl,
-            id: key,
-            shopId: key
-          })
-          const shopId = key
-          firebase.database().ref('/users/').child(getters.user.id + '/shop/').push(shop).update({shopId: shopId})
-          commit('setUserShop', {
-            ...shop,
-            shopId: key
-          })
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-      // Reach out to firebase and store it
-    },
-    updateShopData ({commit}, payload) {
-      commit('setLoading', true)
-      const updateObj = {}
-      if (payload.shopName) {
-        updateObj.shopName = payload.shopName
-      }
-      if (payload.tagLine) {
-        updateObj.tagLine = payload.tagLine
-      }
-      if (payload.description) {
-        updateObj.description = payload.description
-      }
-      if (payload.location) {
-        updateObj.location = payload.location
-      }
-      firebase.database().ref('shops').child(payload.id).update(updateObj)
-        .then(() => {
-          commit('setLoading', false)
-          commit('updateShop', payload)
-        })
-        .catch(error => {
-          console.log(error)
-          commit('setLoading', false)
-        })
-    },
-    loadProducts ({commit, getters}, payload) {
-      commit('setLoading', true)
-      firebase.database().ref('shops/').child(getters.loadedShop.shopId + '/products').once('value')
-        .then((data) => {
-          const products = []
-          const obj = data.val()
-          for (let key in obj) {
-            products.push({
-              id: key,
-              productName: obj[key].productName,
-              productDescription: obj[key].productDescription,
-              productPrice: obj[key].productPrice,
-              productUrl: obj[key].productUrl,
-              productImageUrl: obj[key].productImageUrl,
-              productCategory: obj[key].productCategory,
-              creatorId: obj[key].creatorId,
-              shopId: obj[key].shopId
-            })
-          }
-          commit('setLoadedProducts', products)
-          commit('setLoading', false)
-        })
-        .catch(
-          (error) => {
-            console.log(error)
-            commit('setLoading', false)
-          }
-        )
-    },
-    createProduct ({commit, getters}, payload) {
-      const product = {
-        productName: payload.productName,
-        productDescription: payload.productDescription,
-        productPrice: payload.productPrice,
-        productUrl: payload.productUrl,
-        productCategory: payload.productCategory,
-        creatorId: getters.user.id,
-        shopId: payload.shopId
-      }
-      let productImageUrl
-      let key
-      firebase.database().ref('shops/').child(payload.shopId + '/products').push(product)
-        .then((data) => {
-          key = data.key
-          return key
-        })
-        .then(key => {
-          const filename = payload.productImage.name
-          const ext = filename.slice(filename.lastIndexOf('.'))
-          return firebase.storage().ref('shops/').child(payload.shopId + '/products/' + key + '.' + ext).put(payload.productImage)
-        })
-        .then(fileData => {
-          productImageUrl = fileData.metadata.downloadURLs[0]
-          return firebase.database().ref('shops/').child(payload.shopId + '/products/' + key).update({productImageUrl: productImageUrl})
-        })
-        .then(() => {
-          commit('createProduct', {
-            ...product,
-            productImageUrl: productImageUrl,
-            id: key,
-            productId: key
-          })
-          let key
-          firebase.database().ref('/products/').push(product).update({productImageUrl: productImageUrl})
-          commit('setProduct', {
-            ...product,
-            productImageUrl: productImageUrl,
-            id: key,
-            productId: key
-          })
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-      // Reach out to firebase and store it
-    },
-    // Grab the products from the products tree in firebase
-    fetchSetProduct ({commit, getters}, payload) {
-      commit('setLoading', true)
-      firebase.database().ref('/products/').once('value')
-        .then((data) => {
-          const products = []
-          const obj = data.val()
-          for (let key in obj) {
-            products.push({
-              id: key,
-              productName: obj[key].productName,
-              productDescription: obj[key].productDescription,
-              productPrice: obj[key].productPrice,
-              productUrl: obj[key].productUrl,
-              creatorId: obj[key].creatorId,
-              productCategory: obj[key].productCategory,
-              shopId: obj[key].shopId,
-              productImageUrl: obj[key].productImageUrl
-            })
-          }
-          commit('setProduct', products)
-          commit('setLoading', false)
-        })
-        .catch(
-          (error) => {
-            console.log(error)
-            commit('setLoading', false)
-          }
-        )
-    },
     signUserUp ({commit, getters}, payload) {
       commit('setLoading', true)
       commit('clearError')
@@ -325,16 +70,19 @@ export const store = new Vuex.Store({
             commit('setLoading', false)
             const newUser = {
               id: user.uid,
-              followedUsers: [],
-              favoriteProducts: [],
-              fullName: payload.fullName,
+              userName: payload.userName,
+              userFullName: payload.userFullName,
+              userWebsite: payload.userWebsite,
+              userBio: payload.userBio,
+              profileImage: payload.profileImage,
+              coverImage: payload.coverImage,
               email: payload.email,
-              profileName: payload.profileName,
-              fbKeys: {}
+              products: []
             }
             commit('setUser', newUser)
-            firebase.database().ref('/users/').child(newUser.id + '/profile').push(newUser)
+            firebase.database().ref('/users/').child(newUser.id).set(newUser)
             commit('setUserProfile', newUser)
+            firebase.database().ref('/givers/').child(newUser.id).set(newUser)
           }
         )
         .catch(
@@ -354,13 +102,7 @@ export const store = new Vuex.Store({
             commit('setLoading', false)
             const newUser = {
               id: user.uid,
-              followedUsers: [],
-              favoriteProducts: [],
-              fullName: payload.fullName,
-              email: payload.email,
-              profileName: payload.profileName,
-              fbKeys: {}
-
+              email: payload.email
             }
             commit('setUser', newUser)
           }
@@ -373,40 +115,11 @@ export const store = new Vuex.Store({
           }
         )
     },
-    autoSignIn ({commit}, payload) {
+    autoSignIn ({commit, getters}, payload) {
       commit('setUser', {
         id: payload.uid,
-        followedUsers: [],
-        favoriteProducts: [],
-        fbKeys: {},
-        fullName: payload.fullName,
-        email: payload.email,
-        profileName: payload.profileName
+        email: payload.email
       })
-    },
-    fetchUserData ({commit, getters}) {
-      commit('setLoading', true)
-      firebase.database().ref('/users/' + getters.user.id + '/following/').once('value')
-        .then(data => {
-          const dataPairs = data.val()
-          let followedUsers = []
-          let swappedPairs = {}
-          for (let key in dataPairs) {
-            followedUsers.push(dataPairs[key])
-            swappedPairs[dataPairs[key]] = key
-          }
-          const updatedUser = {
-            id: getters.user.id,
-            followedUsers: followedUsers,
-            fbKeys: swappedPairs
-          }
-          commit('setLoading', false)
-          commit('setUser', updatedUser)
-        })
-        .catch(error => {
-          console.log(error)
-          commit('setLoading', false)
-        })
     },
     fetchUserProfileData ({commit, getters}, payload) {
       commit('setLoading', true)
@@ -414,14 +127,16 @@ export const store = new Vuex.Store({
         .then((data) => {
           const profile = []
           const obj = data.val()
-          for (let key in obj) {
-            profile.push({
-              id: getters.user.id,
-              fullName: obj[key].fullName,
-              email: obj[key].email,
-              profileName: obj[key].profileName
-            })
-          }
+          profile.push({
+            id: getters.user.id,
+            userName: obj.userName,
+            userFullName: obj.userFullName,
+            profileImage: obj.profileImage,
+            coverImage: obj.coverImage,
+            userWebsite: obj.userWebsite,
+            userBio: obj.userBio,
+            email: obj.email
+          })
           commit('setLoading', false)
           commit('setUserProfile', profile)
         })
@@ -432,24 +147,143 @@ export const store = new Vuex.Store({
           }
         )
     },
-    fetchUserShopData ({commit, getters}, payload) {
+    loadGivers ({commit}) {
       commit('setLoading', true)
-      firebase.database().ref('/users/' + getters.user.id + '/shop/').once('value')
+      firebase.database().ref('givers').once('value')
         .then((data) => {
-          const shop = []
+          const givers = []
           const obj = data.val()
           for (let key in obj) {
-            shop.push({
-              shopName: obj[key].shopName,
-              tagLine: obj[key].tagLine,
-              description: obj[key].description,
-              location: obj[key].location,
-              creatorId: obj[key].creatorId,
-              shopId: obj[key].shopId
+            givers.push({
+              id: key,
+              userName: obj[key].userName,
+              userFullName: obj[key].userFullName,
+              userBio: obj[key].userBio,
+              profileImage: obj[key].profileImage,
+              email: obj[key].email,
+              coverImage: obj[key].coverImage,
+              userWebsite: obj[key].userWebsite,
+              products: obj[key].products
             })
           }
+          commit('setLoadedGivers', givers)
           commit('setLoading', false)
-          commit('setUserShop', shop)
+        })
+        .catch(
+          (error) => {
+            console.log(error)
+            commit('setLoading', false)
+          }
+        )
+    },
+    updateGiverData ({commit}, payload) {
+      commit('setLoading', true)
+      const updateObj = {}
+      if (payload.userFullName) {
+        updateObj.userFullName = payload.userFullName
+      }
+      if (payload.userName) {
+        updateObj.userName = payload.userName
+      }
+      if (payload.userWebsite) {
+        updateObj.userWebsite = payload.userWebsite
+      }
+      if (payload.userBio) {
+        updateObj.userBio = payload.userBio
+      }
+      firebase.database().ref('givers').child(payload.id).update(updateObj)
+        .then(() => {
+          commit('setLoading', false)
+          commit('updateGiver', payload)
+        })
+        .catch(error => {
+          console.log(error)
+          commit('setLoading', false)
+        })
+    },
+    createProduct ({commit, getters}, payload) {
+      const product = {
+        productName: payload.productName,
+        productDescription: payload.productDescription,
+        productPrice: payload.productPrice,
+        productUrl: payload.productUrl,
+        creatorId: getters.user.id,
+        giver: payload.giver,
+        productImage: payload.productImage
+      }
+      let key
+      firebase.database().ref('givers/').child(payload.giver + '/products').push(product)
+        .then((data) => {
+          key = data.key
+          return key
+        })
+        .then(() => {
+          commit('createProduct', {
+            ...product,
+            id: key,
+            productId: key
+          })
+          let key
+          firebase.database().ref('/products/').push(product)
+          commit('setProduct', {
+            ...product,
+            id: key,
+            productId: key
+          })
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+      // Reach out to firebase and store it
+    },
+    loadProducts ({commit, getters}, payload) {
+      commit('setLoading', true)
+      firebase.database().ref('givers/').child(getters.loadedGiver.giver + '/products').once('value')
+        .then((data) => {
+          const products = []
+          const obj = data.val()
+          for (let key in obj) {
+            products.push({
+              id: key,
+              productName: obj[key].productName,
+              productDescription: obj[key].productDescription,
+              productPrice: obj[key].productPrice,
+              productUrl: obj[key].productUrl,
+              productImage: obj[key].productImage,
+              creatorId: obj[key].creatorId,
+              giver: obj[key].giver
+            })
+          }
+          commit('setLoadedProducts', products)
+          commit('setLoading', false)
+        })
+        .catch(
+          (error) => {
+            console.log(error)
+            commit('setLoading', false)
+          }
+        )
+    }, // Grab the products from the products tree in firebase
+    fetchSetProduct ({commit, getters}, payload) {
+      commit('setLoading', true)
+      firebase.database().ref('/products/').once('value')
+        .then((data) => {
+          const products = []
+          const obj = data.val()
+          for (let key in obj) {
+            products.push({
+              id: key,
+              productName: obj[key].productName,
+              productDescription: obj[key].productDescription,
+              productPrice: obj[key].productPrice,
+              productUrl: obj[key].productUrl,
+              creatorId: obj[key].creatorId,
+              giver: obj[key].giver,
+              productImage: obj[key].productImage
+            })
+          }
+          commit('setProduct', products)
+          commit('setLoading', false)
         })
         .catch(
           (error) => {
@@ -467,37 +301,28 @@ export const store = new Vuex.Store({
     }
   },
   getters: {
-    loadedShops (state) {
-      return state.loadedShops
+    user (state) {
+      return state.user
     },
-    featuredShops (state, getters) {
-      return getters.loadedShops.slice(0, 3)
+    loadedGivers (state) {
+      return state.loadedGivers
     },
-    loadedShop (state) {
-      return shopId => {
-        return state.loadedShops.find((shop) => {
-          return shop.id === shopId
+    loadedGiver (state) {
+      return giverId => {
+        return state.loadedGivers.find((giver) => {
+          return giver.id === giverId
         })
       }
     },
     loadedProducts (state) {
-      return state.loadedShops
+      return state.loadedGivers
     },
     loadedProduct (state) {
       return productId => {
-        return state.loadedShops.find((product) => {
+        return state.loadedGivers.find((product) => {
           return product.id === productId
         })
       }
-    },
-    user (state) {
-      return state.user
-    },
-    userProfile (state) {
-      return state.userProfile
-    },
-    userShop (state) {
-      return state.userShop
     },
     setProduct (state) {
       return state.setProduct
@@ -508,6 +333,9 @@ export const store = new Vuex.Store({
           return product.id === productId
         })
       }
+    },
+    userProfile (state) {
+      return state.userProfile
     },
     loading (state) {
       return state.loading
