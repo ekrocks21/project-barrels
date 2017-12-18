@@ -47,7 +47,15 @@
 <!-- actions row 2 -->
     <v-card-actions>
 <!-- favorite button -->      
-     <v-btn  
+     <v-btn v-if="userIsCreator" 
+      icon @click="deleteProduct(product['.key'])">
+       <v-icon 
+        class="light--text">
+        delete_forever
+      </v-icon>
+     </v-btn>
+
+    <v-btn v-if="userIsCreator != true" 
       icon>
        <v-icon 
         class="primary--text">
@@ -56,10 +64,10 @@
      </v-btn>
 <!-- donations button -->      
      <v-btn 
-      v-tooltip:bottom="{ html: 'donations earned' }" 
+     v-if="userIsCreator != true" 
+      v-tooltip:bottom="{ html: '100% of Affiliate Donated' }" 
       class="secondary--text" 
       slot="activator" 
-      small 
       icon 
       flat>
        <v-icon 
@@ -72,7 +80,7 @@
       <v-btn 
        icon>
         <v-icon 
-         class="primary--text">
+         class="light--text">
           share
         </v-icon>
       </v-btn>
@@ -84,6 +92,7 @@
 </template>
 
 <script>
+  // import firebase from 'firebase'
   export default {
     props: ['giverId'],
     data () {
@@ -96,6 +105,11 @@
         products: this.$store.getters.loadedGiver(this.giverId).products
       }
     },
+    /* methods: {
+      deleteProduct (key) {
+        firebase.database().ref('givers/' + this.$store.getters.loadedGiver(this.giverId + '/products').child(key).remove()
+      }
+    }, */
     computed: {
       giver () {
         return this.$store.getters.loadedGiver(this.giverId)
@@ -107,7 +121,7 @@
         if (!this.userIsAuthenticated) {
           return false
         }
-        return this.$store.getters.user.id === this.giver.creatorId
+        return this.$store.getters.user.id === this.giver.id
       },
       loading () {
         return this.$store.getters.loading

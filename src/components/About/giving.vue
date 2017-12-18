@@ -1,52 +1,23 @@
 <template>
-<v-app>
-  <v-container fluid>
-	<v-layout class="mt-5">
-    <v-flex xs12 sm12>
-      <v-card flat tile class=" mb-5">
-        <v-card-media style="background-color:#fafafa" height="400px" width="100%">
-    
-            <h1 
-            style="text-align: center; 
-            color: #212121; 
-            margin-top:10%; 
-            font-family: 'Product Sans'"
-            >$3,000.
-            </h1>
-
-            <h4 style="
-            color: #212121; 
-            text-align: center;
-            font-weight: 300;
-            font-size: 23px;
-            line-height: 28px;
-            margin: 0 auto;"
-            class="mt-5">
-            Good Influence is making real impact -- learn how.
-                         </h4>      
-        </v-card-media>
-        <v-card-actions style="background-color: #fafafa">
-              <v-btn class="secondary--text" style="margin: 0 auto" v-tooltip:bottom="{ html: 'how we make impact' }" fab><v-icon>keyboard_arrow_down</v-icon></v-btn>  
-        </v-card-actions>
-        
-      </v-card>
-    </v-flex>
-  </v-layout>
-
-
-  
-  </v-container> 
-      <v-layout class="mt-5">
-    <v-flex class="mt-5">
-      <v-card class="mt-5" flat height="400" style="z-index: 1000">
-        <v-card-media class="secondary" height="400px" width="100%"></v-card-media> 
-      </v-card>
-    </v-flex>
-  </v-layout>
+  <v-app>
+  <GivingHero></GivingHero>
+  <v-divider></v-divider>
+  <AboutGiving></AboutGiving>
+  <AboutGiving2></AboutGiving2>
   </v-app>
 </template>
-<script>
-</script>
 
-<style>
-</style>
+<script>
+  import GivingHero from '../About/givingHero.vue'
+  import AboutGiving from '../About/AboutGiving.vue'
+  import AboutGiving2 from '../About/AboutGiving2.vue'
+  import AboutTeam from '../About/AboutTeam.vue'
+  export default {
+    components: {
+      GivingHero: GivingHero,
+      AboutGiving: AboutGiving,
+      AboutGiving2: AboutGiving2,
+      AboutTeam: AboutTeam
+    }
+  }
+</script>

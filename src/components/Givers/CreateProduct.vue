@@ -49,6 +49,7 @@
     <v-layout row>
       <v-flex xs12>
         <form @submit.prevent="onCreateProduct">
+  <!-- NEEDS TO BECOME A SEARCH FIELD - searches amazon -->        
           <v-layout row>
             <v-flex xs12 sm6 offset-sm3 >
               <v-text-field
@@ -60,6 +61,7 @@
                 ></v-text-field>
             </v-flex>
           </v-layout>
+<!-- paste amazon url here instead -->          
           <v-layout row>
             <v-flex xs12 sm6 offset-sm3>
               <v-text-field

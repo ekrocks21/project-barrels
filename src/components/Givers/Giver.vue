@@ -25,6 +25,7 @@
 
         <v-card-actions>
 <!-- share button -->
+
            <v-btn 
             class="ml-3"  
             fab 
@@ -50,7 +51,7 @@
             <v-btn 
              v-if="userIsCreator === false" 
              dark 
-             class="secondary mb-2 mr-2"
+             class="primary mb-2 mr-2"
              small>
              Follow
             </v-btn>

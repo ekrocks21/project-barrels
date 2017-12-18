@@ -92,6 +92,7 @@
               block
                 class="secondary mb-5"
                 @click="onSaveChanges"
+                @click.native="updateGiverDialog = false"
                 >Save Changes</v-btn>
             </v-flex>
           </v-layout>
